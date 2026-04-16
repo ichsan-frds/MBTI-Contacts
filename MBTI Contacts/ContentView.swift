@@ -10,46 +10,49 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
+    
     @Query private var items: [Item]
-
+    
+    @State private var selectedCategory: String = "Analyst"
+    @State private var selectedMBTI: String = "INTJ"
+    
+    let mbtiGroups: [String: [String]] = [
+        "Analyst": ["INTJ", "INTP", "ENTJ", "ENTP"],
+        "Diplomats": ["INFJ", "INFP", "ENFJ", "ENFP"],
+        "Sentinels": ["ISTJ", "ISFJ", "ESTJ", "ESFJ"],
+        "Explorers": ["ISTP", "ISFP", "ESTP", "ESFP"]
+    ]
+    
     var body: some View {
-        NavigationSplitView {
-            List {
-                ForEach(items) { item in
-                    NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-                    } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+        NavigationStack {
+            VStack {
+                Text("Choose Your MBTI")
+                    .font(.title3.bold())
+                    .padding(.top, 20)
+                Dropdown(selection: $selectedCategory)
+                    .padding(.top, 10)
+                    .padding(.bottom, 50)
+                TabView(selection: $selectedMBTI) {
+                    ForEach(mbtiGroups[selectedCategory] ?? [], id: \.self) { mbti in
+                        VStack(spacing: 20) {
+                            Image(mbti)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 300, height: 300)
+                            
+                            Text(mbti)
+                                .font(Font.largeTitle.bold())
+                        }
+                        .padding(.bottom, 200)
+                        .tag(mbti)
                     }
                 }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
-                }
-            }
-        } detail: {
-            Text("Select an item")
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
+                    .tabViewStyle(.page(indexDisplayMode: .always))
+                    .indexViewStyle(.page(backgroundDisplayMode: .always))
+                    .frame(height: 600)
+                Spacer()
+                Text("Swipe left or right")
+                    .foregroundStyle(.gray)
             }
         }
     }
