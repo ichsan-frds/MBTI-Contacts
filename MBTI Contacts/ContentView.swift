@@ -43,16 +43,27 @@ struct ContentView: View {
                             Text(mbti)
                                 .font(Font.largeTitle.bold())
                         }
-                        .padding(.bottom, 200)
+                        .padding(.bottom, 50)
                         .tag(mbti)
                     }
                 }
                     .tabViewStyle(.page(indexDisplayMode: .always))
                     .indexViewStyle(.page(backgroundDisplayMode: .always))
-                    .frame(height: 600)
-                Spacer()
+                    .frame(height: 450)
                 Text("Swipe left or right")
                     .foregroundStyle(.gray)
+                Spacer()
+                NavigationLink(destination: UserDescriptionView(selectedMBTI: selectedMBTI)) {
+                                    Text("Next")
+                                        .font(.headline)
+                                        .foregroundStyle(.white)
+                                        .frame(maxWidth: .infinity)
+                                        .padding()
+                                        .background(Color.black)
+                                        .cornerRadius(12)
+                                }
+                                .padding(.horizontal, 30)
+//                                .padding(.bottom, 30)
             }
         }
     }
