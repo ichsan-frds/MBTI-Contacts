@@ -54,16 +54,16 @@ struct ContentView: View {
                     .foregroundStyle(.gray)
                 Spacer()
                 NavigationLink(destination: UserDescriptionView(selectedMBTI: selectedMBTI)) {
-                                    Text("Next")
-                                        .font(.headline)
-                                        .foregroundStyle(.white)
-                                        .frame(maxWidth: .infinity)
-                                        .padding()
-                                        .background(Color.black)
-                                        .cornerRadius(12)
-                                }
-                                .padding(.horizontal, 30)
-//                                .padding(.bottom, 30)
+                    Text("Next")
+                        .font(.headline)
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.black)
+                        .cornerRadius(12)
+                }
+                .padding(.horizontal, 30)
+//                .padding(.bottom, 30)
             }
         }
     }
