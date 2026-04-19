@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct UserDescriptionView: View {
-    var selectedMBTI: String
+    let selectedMBTI: String
     @Environment(\.dismiss) private var dismiss
     @State private var textInput: String = ""
     
@@ -17,6 +17,7 @@ struct UserDescriptionView: View {
     var body: some View {
         NavigationStack {
             VStack {
+                // MARK: For Layouting when Debugging - COMMENT IN PROD
                 Spacer()
                 Text("Describe Yourself in One Sentence")
                     .font(Font.title.bold())

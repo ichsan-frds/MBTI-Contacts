@@ -11,7 +11,7 @@ import SwiftData
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     
-    @Query private var items: [Item]
+//    @Query private var contacts: [Contact]
     
     @State private var selectedCategory: String = "Analyst"
     @State private var selectedMBTI: String = "INTJ"
@@ -71,5 +71,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .modelContainer(for: Item.self, inMemory: true)
+        .modelContainer(for: Contact.self, inMemory: true)
 }
