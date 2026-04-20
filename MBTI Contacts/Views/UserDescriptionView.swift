@@ -12,7 +12,7 @@ struct UserDescriptionView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var textInput: String = ""
     
-    let maxTextLength: Int = 75
+    let maxTextLength: Int = 100
     
     var body: some View {
         NavigationStack {

@@ -9,7 +9,9 @@ import SwiftUI
 
 struct SearchContactsView : View {
     var body: some View {
-        Text("SearchContactsView")
+        NavigationStack {
+            
+        }
     }
 }
 

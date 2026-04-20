@@ -18,6 +18,10 @@ final class Contact {
     
     var timestamp: Date
     
+    var firstLetter : String {
+        String(firstName.prefix(1))
+    }
+    
     init(
         firstName: String,
         lastName: String = "",

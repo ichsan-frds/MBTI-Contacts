@@ -52,7 +52,6 @@ struct GroupedMBTIView : View {
                 
                 TabView(selection: $selectedMBTI) {
                     ForEach(mbtiGroupsMap[selectedGroup] ?? [], id: \.self) { mbti in
-                                        
                         VStack(alignment: .leading) {
                             Text(mbti)
                                 .font(.title3.bold())
@@ -76,15 +75,30 @@ struct GroupedMBTIView : View {
                                          .shadow(color: Color.gray.opacity(0.3), radius: 10)
                                      
                                      let filteredContacts = contacts.filter { $0.mbti == mbti }
+                                     let groupedContacts = Dictionary(grouping: filteredContacts) {
+                                         String($0.firstName.prefix(1)).uppercased()
+                                     }
                                      
                                      if filteredContacts.isEmpty {
                                          Text("No \(mbti) contacts yet")
                                              .foregroundColor(.gray)
                                      } else {
                                          ScrollView {
-                                             VStack(spacing: 15) {
-                                                 ForEach(filteredContacts, id: \.phoneNumber) { contact in
-                                                     ContactRow(contact: contact)
+                                             VStack(alignment: .leading, spacing: 10) {
+                                                 ForEach(groupedContacts.keys.sorted(), id: \.self) { letter in
+                                                     Section(header: HStack {
+                                                         Text(letter)
+                                                             .font(.footnote.bold())
+                                                             .foregroundColor(.secondary)
+                                                             .padding(.leading, 10)
+                                                         Spacer()
+                                                     }) {
+                                                         ForEach(groupedContacts[letter] ?? [], id: \.phoneNumber) { contact in
+                                                             Divider()
+                                                                 .padding(.horizontal, 10)
+                                                             ContactRow(contact: contact)
+                                                         }
+                                                     }
                                                  }
                                              }
                                              .padding(.top, 10)
@@ -95,7 +109,7 @@ struct GroupedMBTIView : View {
                              }
                             Spacer()
                         }
-                            .padding(.horizontal, 35)
+                            .padding(.horizontal, 20)
                             .tag(mbti)
                     }
                 }
