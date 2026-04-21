@@ -12,12 +12,13 @@ struct GroupedMBTIView: View {
     var userName: String = "Ichsan Firdaus"
     var userMBTI: String = "INTJ"
     var userDescription: String = ""
-
+    
     @State private var selectedGroup: String = "Analyst"
     @State private var selectedMBTI: String = "INTJ"
     @State private var contacts: [Contact] = ContactSeeder.defaultContacts
 
     var body: some View {
+        NavigationStack {
             VStack(spacing: 16) {
 
                 Text("MBTI Contacts")
@@ -206,6 +207,7 @@ struct GroupedMBTIView: View {
                         .background(Color.white.opacity(0.1))
                         .cornerRadius(30)
                     }
+                    .buttonStyle(PlainButtonStyle())
 
                     Button(action: {
                         print("Add Contact Sheet")
@@ -230,6 +232,7 @@ struct GroupedMBTIView: View {
             .onAppear {
                 selectedMBTI = initialMBTI
                 selectedGroup = MBTIData.mbtiToGroup[initialMBTI] ?? "Analyst"
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ import SwiftUI
 struct ContactRow: View {
     let contact: Contact
     var displayMbti: Bool = false
+    var isDark: Bool = false
     
     var body: some View {
         NavigationLink(destination: ContactDetailView(contact: contact)) {
@@ -17,10 +18,10 @@ struct ContactRow: View {
                 ZStack {
                     Circle()
                         .frame(width: 50, height: 50)
-                        .foregroundColor(Color(.systemGray6))
+                        .foregroundColor(isDark ? Color.white.opacity(0.15) : Color(.systemGray6))
                     Text("\(contact.firstName.prefix(1).uppercased())\(contact.lastName.prefix(1).uppercased())")
                         .font(.system(size: 20, weight: .bold))
-                        .foregroundColor(.black)
+                        .foregroundColor(isDark ? .white : .black)
                 }
                 
                 VStack(alignment: .leading, spacing: 4) {
@@ -29,26 +30,20 @@ struct ContactRow: View {
                     HStack {
                         Text("\(contact.firstName) \(contact.lastName)")
                             .font(.headline)
-                            .foregroundColor(.black)
+                            .foregroundColor(isDark ? .white : .black)
                         
                         if displayMbti {
                             Spacer()
                             Text(contact.mbti)
                                 .font(.headline.bold())
-                                .foregroundColor(.secondary)
+                                .foregroundColor(MBTIData.colors[contact.mbti] ?? .secondary)
                         }
                     }
-                    
-                    // MARK: UNCOMMENT TO ADD DESCRIPTION
-                    //                        Text(contact.personDescription)
-                    //                    .font(.system(size: 12))
-                    //                    .foregroundColor(.secondary)
-                    //                    .lineLimit(2)
-                    //                    .multilineTextAlignment(.leading)
                     
                     Spacer()
                     
                     Divider()
+                        .background(isDark ? Color.white.opacity(0.15) : Color.gray.opacity(0.3))
                         .padding(.top, 5)
                 }
             }
