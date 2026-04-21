@@ -95,7 +95,7 @@ struct ContactDetailView: View {
                             .background(RoundedRectangle(cornerRadius: 25).foregroundStyle(.red))
                     }
                 }
-                .padding(.horizontal, 30)C
+                .padding(.horizontal, 30)
 //                .padding(.bottom, 40)
             }
         }
