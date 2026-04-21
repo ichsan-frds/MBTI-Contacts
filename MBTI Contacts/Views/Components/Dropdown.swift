@@ -1,5 +1,5 @@
 //
-//  DarkDropdown.swift
+//  Dropdown.swift
 //  MBTI Contacts
 //
 //  Created by Richard on 20/04/26.
@@ -7,13 +7,12 @@
 
 import SwiftUI
 
-struct DarkDropdown: View {
+struct Dropdown: View {
     @Binding var selection: String
-    let options = ["Analyst", "Diplomats", "Sentinels", "Explorers"]
     
     var body: some View {
         Menu {
-            ForEach(options, id: \.self) { option in
+            ForEach(MBTIData.mbtiGroups, id: \.self) { option in
                 Button(option) {
                     selection = option
                 }
@@ -24,7 +23,7 @@ struct DarkDropdown: View {
                     .font(.headline)
                     .foregroundStyle(.white)
                 Spacer()
-                Text("v")
+                Image(systemName: "chevron.down")
                     .foregroundStyle(.white)
             }
             .padding(.horizontal, 20)

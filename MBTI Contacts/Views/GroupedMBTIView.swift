@@ -7,88 +7,181 @@
 
 import SwiftUI
 
-struct GroupedMBTIView : View {
+struct GroupedMBTIView: View {
+    var initialMBTI: String = "INTJ"
+    var userName: String = "Ichsan Firdaus"
+    var userMBTI: String = "INTJ"
+    var userDescription: String = ""
+
     @State private var selectedGroup: String = "Analyst"
     @State private var selectedMBTI: String = "INTJ"
     @State private var contacts: [Contact] = ContactSeeder.defaultContacts
-    
-    let mbtiGroups : [String] = ["Analyst", "Diplomats", "Sentinels", "Explorers"]
-    let mbtiGroupsMap: [String: [String]] = [
-        "Analyst": ["INTJ", "INTP", "ENTJ", "ENTP"],
-        "Diplomats": ["INFJ", "INFP", "ENFJ", "ENFP"],
-        "Sentinels": ["ISTJ", "ISFJ", "ESTJ", "ESFJ"],
-        "Explorers": ["ISTP", "ISFP", "ESTP", "ESFP"]
-    ]
-    
+
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 20) {
+            VStack(spacing: 16) {
+
                 Text("MBTI Contacts")
                     .font(.title3.bold())
+                    .foregroundColor(.white)
                     .padding(.top, 20)
-                
-                HStack {
-                    ForEach(mbtiGroups, id: \.self) { group in
+
+                HStack(spacing: 8) {
+                    ForEach(MBTIData.mbtiGroups, id: \.self) { group in
                         Button(action: {
                             selectedGroup = group
-                        }) {
-                            ZStack {
-                                Rectangle()
-                                    .fill(selectedGroup == group ? Color.black : Color.secondary)
-                                    .frame(width: 88, height: 27)
-                                    .cornerRadius(50)
-                                Text(group)
-                                    .font(.system(size: 14, weight: .bold))
-                                    .foregroundColor(selectedGroup == group ? Color.white : Color.secondary)
+                            if let firstMBTI = MBTIData.groups[group]?.first {
+                                selectedMBTI = firstMBTI
                             }
+                        }) {
+                            Text(group)
+                                .font(.system(size: 13, weight: .semibold))
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 7)
+                                .background(
+                                    selectedGroup == group
+                                    ? Color.white.opacity(0.6)
+                                    : Color.white.opacity(0.08)
+                                )
+                                .cornerRadius(50)
                         }
                     }
                 }
-                
+                .padding(.horizontal, 16)
+
                 TabView(selection: $selectedMBTI) {
-                    ForEach(mbtiGroupsMap[selectedGroup] ?? [], id: \.self) { mbti in
-                        VStack(alignment: .leading) {
-                            Text(mbti)
-                                .font(.title3.bold())
-                            
+                    ForEach(MBTIData.groups[selectedGroup] ?? [], id: \.self) { mbti in
+
+                        VStack(alignment: .leading, spacing: 0) {
+
                             ZStack {
                                 RoundedRectangle(cornerRadius: 25)
-                                    .fill(Color.white)
-                                    .frame(height: 510)
-                                    .shadow(color: Color.gray.opacity(0.3), radius: 10)
-                                
+                                    .fill(
+                                        LinearGradient(
+                                            colors: [
+                                                MBTIData.colors[mbti] ?? Color.purple,
+                                                MBTIData.darkColors[mbti] ?? Color.purple.opacity(0.5)
+                                            ],
+                                            startPoint: .top,
+                                            endPoint: .bottom
+                                        )
+                                    )
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 540)
+
                                 let filteredContacts = contacts.filter { $0.mbti == mbti }
                                 let groupedContacts = Dictionary(grouping: filteredContacts) {
                                     String($0.firstName.prefix(1)).uppercased()
                                 }
-                                
-                                if filteredContacts.isEmpty {
-                                    Text("No \(mbti) contacts yet")
-                                        .foregroundColor(.gray)
-                                } else {
-                                    ScrollView {
-                                        VStack(alignment: .leading, spacing: 10) {
-                                            ForEach(groupedContacts.keys.sorted(), id: \.self) { letter in
-                                                Section(header: HStack {
-                                                    Text(letter)
-                                                        .font(.footnote.bold())
-                                                        .foregroundColor(.secondary)
-                                                        .padding(.leading, 10)
-                                                    Spacer()
-                                                }) {
+
+                                if mbti == userMBTI && filteredContacts.isEmpty {
+                                    VStack(alignment: .leading, spacing: 0) {
+                                        Text(mbti)
+                                            .font(.title2.bold())
+                                            .foregroundColor(.white)
+                                            .frame(maxWidth: .infinity, alignment: .center)
+                                            .padding(.top, 20)
+                                            .padding(.bottom, 8)
+
+                                        UserProfileRow(userName: userName)
+
+                                        Spacer()
+                                    }
+                                    .frame(height: 540)
+
+                                } else if mbti == userMBTI {
+                                    VStack(alignment: .leading, spacing: 0) {
+                                        Text(mbti)
+                                            .font(.title2.bold())
+                                            .foregroundColor(.white)
+                                            .frame(maxWidth: .infinity, alignment: .center)
+                                            .padding(.top, 20)
+                                            .padding(.bottom, 8)
+
+                                        UserProfileRow(userName: userName)
+
+                                        Divider()
+                                            .background(Color.white.opacity(0.15))
+                                            .padding(.leading, 76)
+
+                                        ScrollView {
+                                            VStack(alignment: .leading, spacing: 0) {
+                                                ForEach(groupedContacts.keys.sorted(), id: \.self) { letter in
+                                                    HStack {
+                                                        Text(letter)
+                                                            .font(.footnote.bold())
+                                                            .foregroundColor(.white.opacity(0.5))
+                                                            .padding(.leading, 16)
+                                                        Spacer()
+                                                    }
+                                                    .padding(.top, 12)
+                                                    .padding(.bottom, 4)
+
                                                     Divider()
-                                                        .padding(.horizontal, 10)
+                                                        .background(Color.white.opacity(0.2))
+
                                                     ForEach(groupedContacts[letter] ?? [], id: \.phoneNumber) { contact in
-                                                        ContactRow(contact: contact)
+                                                        ContactRowDark(contact: contact)
                                                     }
                                                 }
                                             }
+                                            .padding(.top, 4)
                                         }
-                                        .padding(.top, 10)
+                                        .frame(maxHeight: .infinity)
                                     }
-                                    .frame(height: 510)
+                                    .frame(height: 540)
+
+                                } else if filteredContacts.isEmpty {
+                                    VStack {
+                                        Text(mbti)
+                                            .font(.title2.bold())
+                                            .foregroundColor(.white)
+                                            .padding(.top, 20)
+                                        Spacer()
+                                        Text("No \(mbti) contacts yet")
+                                            .foregroundColor(.white.opacity(0.5))
+                                        Spacer()
+                                    }
+                                    .frame(height: 540)
+
+                                } else {
+                                    VStack(alignment: .leading, spacing: 0) {
+                                        Text(mbti)
+                                            .font(.title2.bold())
+                                            .foregroundColor(.white)
+                                            .frame(maxWidth: .infinity, alignment: .center)
+                                            .padding(.top, 20)
+                                            .padding(.bottom, 8)
+
+                                        ScrollView {
+                                            VStack(alignment: .leading, spacing: 0) {
+                                                ForEach(groupedContacts.keys.sorted(), id: \.self) { letter in
+                                                    HStack {
+                                                        Text(letter)
+                                                            .font(.footnote.bold())
+                                                            .foregroundColor(.white.opacity(0.5))
+                                                            .padding(.leading, 16)
+                                                        Spacer()
+                                                    }
+                                                    .padding(.top, 12)
+                                                    .padding(.bottom, 4)
+
+                                                    Divider()
+                                                        .background(Color.white.opacity(0.2))
+
+                                                    ForEach(groupedContacts[letter] ?? [], id: \.phoneNumber) { contact in
+                                                        ContactRowDark(contact: contact)
+                                                    }
+                                                }
+                                            }
+                                            .padding(.top, 4)
+                                        }
+                                        .frame(maxHeight: .infinity)
+                                    }
+                                    .frame(height: 540)
                                 }
                             }
+
                             Spacer()
                         }
                         .padding(.horizontal, 20)
@@ -97,40 +190,116 @@ struct GroupedMBTIView : View {
                 }
                 .tabViewStyle(.page(indexDisplayMode: .always))
                 .indexViewStyle(.page(backgroundDisplayMode: .always))
-                
-                HStack(spacing: 12) {
+                .frame(maxHeight: .infinity)
+
+                HStack(spacing: 10) {
                     NavigationLink(destination: SearchContactsView()) {
                         HStack {
                             Image(systemName: "magnifyingglass")
-                                .foregroundColor(.gray)
+                                .foregroundColor(.white.opacity(0.6))
                             Text("Search")
-                                .foregroundColor(.gray)
+                                .foregroundColor(.white.opacity(0.6))
                             Spacer()
                         }
-                        .padding(12)
-                        .background(Color.white)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 14)
+                        .background(Color.white.opacity(0.1))
                         .cornerRadius(30)
-                        .shadow(color: .black.opacity(0.1), radius: 5, y: 5)
                     }
-                    
-                    NavigationLink(destination: AddContactView()) {
+
+                    Button(action: {
+                        print("Add Contact Sheet")
+                    }) {
                         Image(systemName: "plus")
                             .font(.title3.bold())
-                            .foregroundColor(.black)
-                            .padding(15)
-                            .background(Color.white)
+                            .foregroundColor(.white)
+                            .padding(14)
+                            .background(Color.white.opacity(0.15))
                             .cornerRadius(999)
-                            .shadow(color: .black.opacity(0.1), radius: 5, y: 5)
                     }
-                    
                 }
                 .padding(.horizontal, 20)
+                .padding(.bottom, 16)
             }
-            .background(Color(.systemGray6))
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(
+                Color(red: 0.16, green: 0.16, blue: 0.18)
+                    .ignoresSafeArea()
+            )
+            .navigationBarBackButtonHidden(true)
+            .onAppear {
+                selectedMBTI = initialMBTI
+                selectedGroup = MBTIData.mbtiToGroup[initialMBTI] ?? "Analyst"
         }
     }
 }
 
+struct UserProfileRow: View {
+    let userName: String
+
+    var body: some View {
+        HStack(spacing: 14) {
+            ZStack {
+                Circle()
+                    .fill(Color.black.opacity(0.25))
+                    .frame(width: 46, height: 46)
+                let parts = userName.split(separator: " ")
+                let initials = parts.prefix(2).compactMap { $0.first }.map { String($0) }.joined()
+                Text(initials.uppercased())
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundColor(.white)
+            }
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(userName)
+                    .font(.headline)
+                    .foregroundColor(.white)
+                Text("My Profile")
+                    .font(.caption)
+                    .foregroundColor(.white.opacity(0.55))
+            }
+
+            Spacer()
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+    }
+}
+
+struct ContactRowDark: View {
+    let contact: Contact
+
+    var body: some View {
+        HStack(spacing: 14) {
+            ZStack {
+                Circle()
+                    .fill(Color.black.opacity(0.25))
+                    .frame(width: 46, height: 46)
+                Text("\(contact.firstName.prefix(1).uppercased())\(contact.lastName.prefix(1).uppercased())")
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundColor(.white)
+            }
+
+            Text("\(contact.firstName) \(contact.lastName)")
+                .font(.headline)
+                .foregroundColor(.white)
+
+            Spacer()
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+
+        Divider()
+            .background(Color.white.opacity(0.15))
+            .padding(.leading, 76)
+    }
+}
+
 #Preview {
-    GroupedMBTIView()
+    GroupedMBTIView(
+        initialMBTI: "INTJ",
+        userName: "Ichsan Firdaus",
+        userMBTI: "INTJ",
+        userDescription: "Calm and has a great vision in life"
+    )
 }
