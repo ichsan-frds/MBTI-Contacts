@@ -1,3 +1,12 @@
+//
+//  DarkDropdown.swift
+//  MBTI Contacts
+//
+//  Created by Richard on 20/04/26.
+//
+
+import SwiftUI
+
 struct DarkDropdown: View {
     @Binding var selection: String
     let options = ["Analyst", "Diplomats", "Sentinels", "Explorers"]
