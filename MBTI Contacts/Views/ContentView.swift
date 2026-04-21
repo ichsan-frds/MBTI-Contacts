@@ -15,85 +15,83 @@ struct ContentView: View {
     @State private var selectedMBTI: String = "INTJ"
     
     var body: some View {
-        NavigationStack {
-            VStack {
-                Text("Choose Your MBTI")
-                    .font(.title3.bold())
-                    .foregroundColor(.white)
-                    .padding(.top, 20)
-                
-                Dropdown(selection: $selectedCategory)
-                    .padding(.top, 10)
-                    .padding(.bottom, 20)
-                    .onChange(of: selectedCategory) { oldValue, newValue in
-                        if let firstMBTI = MBTIData.groups[newValue]?.first {
-                            selectedMBTI = firstMBTI
-                        }
-                    }
-                
-                TabView(selection: $selectedMBTI) {
-                    ForEach(MBTIData.groups[selectedCategory] ?? [], id: \.self) { mbti in
-                        VStack(spacing: 16) {
-                            ZStack {
-                                Circle()
-                                    .fill(LinearGradient(
-                                        colors: [
-                                            MBTIData.colors[mbti] ?? Color.purple,
-                                            MBTIData.darkColors[mbti] ?? Color.purple.opacity(0.5)
-                                        ],
-                                        startPoint: .top,
-                                        endPoint: .bottom
-                                    ))
-                                    .frame(width: 280, height: 280)
-                                
-                                Image(mbti)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 260, height: 260)
-                            }
-                            
-                            Text(mbti)
-                                .font(.largeTitle.bold())
-                                .foregroundColor(.white)
-                            
-                            Text(MBTIData.descriptions[mbti] ?? "")
-                                .font(.body)
-                                .foregroundColor(.white.opacity(0.85))
-                                .multilineTextAlignment(.center)
-                                .padding(.horizontal, 30)
-                        }
-                        .padding(.bottom, 20)
-                        .tag(mbti)
-                    }
-                }
-                .tabViewStyle(.page(indexDisplayMode: .always))
-                .indexViewStyle(.page(backgroundDisplayMode: .always))
-                .frame(height: 530)
-                
-                Spacer()
-                
-                NavigationLink(destination: UserDescriptionView(selectedMBTI: selectedMBTI)) {
-                    Text("Next")
-                        .font(.headline)
-                        .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.black)
-                        .cornerRadius(12)
-                }
-                .padding(.horizontal, 30)
+        VStack {
+            Dropdown(selection: $selectedCategory)
+                .padding(.top, 10)
                 .padding(.bottom, 20)
+                .onChange(of: selectedCategory) { oldValue, newValue in
+                    if let firstMBTI = MBTIData.groups[newValue]?.first {
+                        selectedMBTI = firstMBTI
+                    }
+                }
+            
+            TabView(selection: $selectedMBTI) {
+                ForEach(MBTIData.groups[selectedCategory] ?? [], id: \.self) { mbti in
+                    VStack(spacing: 16) {
+                        ZStack {
+                            Circle()
+                                .fill(LinearGradient(
+                                    colors: [
+                                        MBTIData.colors[mbti] ?? Color.purple,
+                                        MBTIData.darkColors[mbti] ?? Color.purple.opacity(0.5)
+                                    ],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                ))
+                                .frame(width: 280, height: 280)
+                            
+                            Image(mbti)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 260, height: 260)
+                        }
+                        
+                        Text(mbti)
+                            .font(.largeTitle.bold())
+                            .foregroundColor(.white)
+                        
+                        Text(MBTIData.descriptions[mbti] ?? "")
+                            .font(.body)
+                            .foregroundColor(.white.opacity(0.85))
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 30)
+                    }
+                    .padding(.bottom, 20)
+                    .tag(mbti)
+                }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(
-                Color(red: 0.16, green: 0.16, blue: 0.18)
-                    .ignoresSafeArea()
-            )
+            .tabViewStyle(.page(indexDisplayMode: .always))
+            .indexViewStyle(.page(backgroundDisplayMode: .always))
+            .frame(height: 530)
+            
+            Spacer()
+            
+            NavigationLink(destination: UserDescriptionView(selectedMBTI: selectedMBTI)) {
+                Text("Next")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.black)
+                    .cornerRadius(12)
+            }
+            .padding(.horizontal, 30)
+            .padding(.bottom, 20)
         }
+        .navigationTitle("Choose Your MBTI")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbarColorScheme(.dark, for: .navigationBar)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(
+            Color(red: 0.16, green: 0.16, blue: 0.18)
+                .ignoresSafeArea()
+        )
     }
 }
 
 #Preview {
-    ContentView()
-        .modelContainer(for: Contact.self, inMemory: true)
+    NavigationStack {
+        ContentView()
+            .modelContainer(for: Contact.self, inMemory: true)
+    }
 }

@@ -24,6 +24,13 @@ struct MBTIData {
         "ISTP": "Explorers", "ISFP": "Explorers", "ESTP": "Explorers", "ESFP": "Explorers"
     ]
     
+    static let groupColors: [String: Color] = [
+        "Analyst": Color(red: 0.75, green: 0.4,  blue: 0.95),
+        "Diplomats": Color(red: 0.2,  green: 0.85, blue: 0.55),
+        "Sentinels": Color(red: 0.3,  green: 0.6,  blue: 1.0),
+        "Explorers": Color(red: 1.0,  green: 0.7,  blue: 0.2),
+    ]
+    
     static let colors: [String: Color] = [
         "INTJ": Color(red: 0.75, green: 0.4,  blue: 0.95),
         "INTP": Color(red: 0.75, green: 0.4,  blue: 0.95),
