@@ -8,52 +8,86 @@
 import SwiftUI
 
 struct ContactRow: View {
-    let contact: Contact
+    var contact: Contact?
+    var user: User?
+    
+    var isUser: Bool = false
     var displayMbti: Bool = false
     
+    private var firstName: String {
+        contact?.firstName ?? user?.firstName ?? ""
+    }
+    
+    private var lastName: String {
+        contact?.lastName ?? user?.lastName ?? ""
+    }
+    
+    private var mbtiValue: String {
+        contact?.mbti ?? user?.mbti ?? ""
+    }
+    
     var body: some View {
-        NavigationLink(destination: ContactDetailView(contact: contact)) {
-            HStack {
+        NavigationLink(destination: destinationView) {
+            HStack(spacing: 14) {
+                
                 ZStack {
                     Circle()
-                        .frame(width: 50, height: 50)
-                        .foregroundColor(Color(.systemGray6))
-                    Text("\(contact.firstName.prefix(1).uppercased())\(contact.lastName.prefix(1).uppercased())")
-                        .font(.system(size: 20, weight: .bold))
-                        .foregroundColor(.black)
+                        .fill(Color.black.opacity(0.25))
+                        .frame(width: 46, height: 46)
+                    Text("\(firstName.prefix(1).uppercased())\(lastName.prefix(1).uppercased())")
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundColor(.white)
                 }
-                
-                VStack(alignment: .leading, spacing: 4) {
-                    Spacer()
+
+                if isUser {
                     
-                    HStack {
-                        Text("\(contact.firstName) \(contact.lastName)")
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("\(firstName) \(lastName)")
                             .font(.headline)
-                            .foregroundColor(.black)
+                            .foregroundColor(.white)
                         
-                        if displayMbti {
-                            Spacer()
-                            Text(contact.mbti)
-                                .font(.headline.bold())
-                                .foregroundColor(.secondary)
-                        }
+                        Text("My Profile")
+                            .font(.caption)
+                            .foregroundColor(.white.opacity(0.55))
                     }
-                    
-                    // MARK: UNCOMMENT TO ADD DESCRIPTION
-                    //                        Text(contact.personDescription)
-                    //                    .font(.system(size: 12))
-                    //                    .foregroundColor(.secondary)
-                    //                    .lineLimit(2)
-                    //                    .multilineTextAlignment(.leading)
-                    
                     Spacer()
                     
-                    Divider()
-                        .padding(.top, 5)
+                } else {
+                    
+                    Text("\(firstName) \(lastName)")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                    
+                    if displayMbti {
+                        Spacer()
+                        Text(mbtiValue)
+                            .font(.headline.bold())
+                            .foregroundColor(.secondary)
+                    } else {
+                        Spacer()
+                    }
                 }
             }
-            .padding(.horizontal)
-            .cornerRadius(25)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        
+        if !isUser {
+            Divider()
+                .background(Color.white.opacity(0.5))
+                .padding(.leading, 76)
+                .padding(.trailing, 20)
+        }
+    }
+    
+    @ViewBuilder
+    private var destinationView: some View {
+        if let contact = contact {
+            ContactDetailView(contact: contact)
+        } else if let user = user {
+            Text("User Profile View for \(user.firstName)")
+        } else {
+            EmptyView()
         }
     }
 }

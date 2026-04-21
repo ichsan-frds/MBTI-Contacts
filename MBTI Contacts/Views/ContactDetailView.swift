@@ -72,7 +72,7 @@ struct ContactDetailView: View {
                     
                     VStack(alignment: .leading, spacing: 6) {
                         Text("One Sentence Description").bold().foregroundStyle(.primary)
-                        Text(contact.personDescription)
+                        Text(contact.desc)
                             .foregroundStyle(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
@@ -106,6 +106,6 @@ struct ContactDetailView: View {
 
 #Preview {
     NavigationStack {
-        ContactDetailView(contact: Contact(firstName: "Andres",  lastName: "Iniesta", phoneNumber: "+6212345678990", mbti: "INTJ", personDescription: "Calm and has a great vision in life Calm and has a great vision in life Calm and has a great vision"))
+        ContactDetailView(contact: Contact(firstName: "Andres",  lastName: "Iniesta", phoneNumber: "+6212345678990", mbti: "INTJ", desc: "Calm and has a great vision in life Calm and has a great vision in life Calm and has a great vision"))
     }
 }

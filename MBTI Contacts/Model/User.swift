@@ -1,15 +1,15 @@
 //
-//  Contact.swift
+//  User.swift
 //  MBTI Contacts
 //
-//  Created by Ichsan Firdaus on 16/04/26.
+//  Created by Ichsan Firdaus on 21/04/26.
 //
 
 import Foundation
 import SwiftData
 
 @Model
-final class Contact {
+final class User {
     var firstName: String
     var lastName: String
     var phoneNumber: String
@@ -17,10 +17,6 @@ final class Contact {
     var desc: String
     
     var timestamp: Date
-    
-    var firstLetter : String {
-        String(firstName.prefix(1))
-    }
     
     init(
         firstName: String,

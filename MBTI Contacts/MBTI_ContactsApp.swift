@@ -13,6 +13,7 @@ struct MBTI_ContactsApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             Contact.self,
+            User.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 

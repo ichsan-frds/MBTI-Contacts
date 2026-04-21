@@ -35,20 +35,19 @@ struct RegisterView : View {
                 
                 VStack() {
                     TextField("", text: $firstName, prompt: Text("First Name").foregroundColor(.white.opacity(0.6)))
-                        .padding(.vertical, 10)
+                        .padding(.vertical, 10).foregroundColor(.white)
                     
                     Divider()
                         .background(Color.gray.opacity(0.6))
                     
                     TextField("", text: $lastName, prompt: Text("Last Name").foregroundColor(.white.opacity(0.6)))
-                        .padding(.vertical, 10)
+                        .padding(.vertical, 10).foregroundColor(.white)
                     
                     Divider()
                         .background(Color.gray.opacity(0.6))
                     
                     TextField("", text: $phoneNumber, prompt: Text("Phone Number").foregroundColor(.white.opacity(0.6)))
-                        .padding(.vertical, 10)
-                        .keyboardType(.phonePad)
+                        .padding(.vertical, 10).foregroundColor(.white)
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 10)
@@ -60,15 +59,16 @@ struct RegisterView : View {
                 
                 Spacer()
                 
-                NavigationLink(destination: ContentView()) {
+                NavigationLink(destination: ChooseMBTIView(firstName: firstName, lastName: lastName, phoneNumber: phoneNumber)) {
                     Text("Next")
                         .font(.headline)
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.black)
+                        .background(firstName.isEmpty || lastName.isEmpty || phoneNumber.isEmpty ? Color.gray : Color.black)
                         .cornerRadius(12)
                 }
+                .disabled(firstName.isEmpty || lastName.isEmpty || phoneNumber.isEmpty)
                 .padding(.horizontal, 30)
                 .padding(.bottom, 20)
             }
