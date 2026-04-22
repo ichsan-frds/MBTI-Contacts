@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct SearchContactsView: View {
+    var initialSearchText: String = ""
+
     @State private var contacts: [Contact] = ContactSeeder.defaultContacts
     @State private var searchText: String = ""
     
@@ -19,10 +21,8 @@ struct SearchContactsView: View {
         } else {
             return contacts.filter { contact in
                 let fullName = "\(contact.firstName) \(contact.lastName)"
-                
                 let matchesName = fullName.localizedCaseInsensitiveContains(searchText)
                 let matchesMBTI = contact.mbti.localizedCaseInsensitiveContains(searchText)
-                
                 return matchesName || matchesMBTI
             }
         }
@@ -37,7 +37,7 @@ struct SearchContactsView: View {
             if searchResults.isEmpty {
                 Spacer()
                 Text(searchText.isEmpty ? "No contacts yet" : "No results found")
-                    .foregroundColor(.gray)
+                    .foregroundColor(.white.opacity(0.5))
                 Spacer()
             } else {
                 ScrollView {
@@ -46,15 +46,16 @@ struct SearchContactsView: View {
                             Section(header: HStack {
                                 Text(letter)
                                     .font(.footnote.bold())
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(.white.opacity(0.5))
                                     .padding(.leading, 20)
                                 Spacer()
                             }) {
                                 Divider()
+                                    .background(Color.white.opacity(0.2))
                                     .padding(.horizontal, 20)
                                 
                                 ForEach(groupedContacts[letter] ?? [], id: \.phoneNumber) { contact in
-                                    ContactRow(contact: contact, displayMbti: true)
+                                    ContactRow(contact: contact, displayMbti: true, isDark: true)
                                 }
                             }
                         }
@@ -67,38 +68,46 @@ struct SearchContactsView: View {
             HStack(spacing: 12) {
                 HStack {
                     Image(systemName: "magnifyingglass")
-                        .foregroundColor(.gray)
+                        .foregroundColor(.white.opacity(0.6))
                     TextField("Search", text: $searchText)
+                        .foregroundColor(.white)
+                        .tint(.white)
                         .autocorrectionDisabled()
                         .focused($isSearchFocused)
                     
                     if !searchText.isEmpty {
                         Button(action: { searchText = "" }) {
                             Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(.gray)
+                                .foregroundColor(.white.opacity(0.6))
                         }
                     }
                 }
                 .padding(12)
-                .background(Color.white)
+                .background(Color.white.opacity(0.1))
                 .cornerRadius(30)
-                .shadow(color: .black.opacity(0.1), radius: 5, y: 5)
                 
                 NavigationLink(destination: AddContactView()) {
                     Image(systemName: "plus")
                         .font(.title3.bold())
-                        .foregroundColor(.black)
+                        .foregroundColor(.white)
                         .padding(15)
-                        .background(Color.white)
+                        .background(Color.white.opacity(0.15))
                         .cornerRadius(999)
-                        .shadow(color: .black.opacity(0.1), radius: 5, y: 5)
                 }
             }
             .padding(.horizontal, 20)
+            .padding(.bottom, 16)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(
+            Color(red: 0.16, green: 0.16, blue: 0.18)
+                .ignoresSafeArea()
+        )
         .navigationTitle("All Contacts")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarColorScheme(.dark, for: .navigationBar)
         .onAppear {
+            searchText = initialSearchText
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 isSearchFocused = true
             }
