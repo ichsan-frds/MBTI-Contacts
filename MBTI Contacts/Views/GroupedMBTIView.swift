@@ -17,6 +17,7 @@ struct GroupedMBTIView: View {
     @State private var selectedGroup: String = "Analyst"
     @State private var selectedMBTI: String = "INTJ"
     @State private var contacts: [Contact] = ContactSeeder.defaultContacts
+    @State private var hasLoaded: Bool = false
     
     var body: some View {
         VStack(spacing: 16) {
@@ -79,7 +80,7 @@ struct GroupedMBTIView: View {
                                     .padding(.bottom, 8)
                                 
                                 if let user = currentUser, mbti == user.mbti {
-                                    ContactRow(user: user, isUser: true)
+                                    ContactRow(person: user)
                                     
                                     if !filteredContacts.isEmpty {
                                         Divider()
@@ -111,10 +112,12 @@ struct GroupedMBTIView: View {
                                                 .padding(.bottom, 4)
                                                 
                                                 Divider()
-                                                    .background(Color.white.opacity(0.2))
+                                                    .background(Color.white.opacity(0.5))
+                                                    .padding(.leading, 15)
+                                                    .padding(.trailing, 20)
                                                 
                                                 ForEach(groupedContacts[letter] ?? [], id: \.phoneNumber) { contact in
-                                                    ContactRow(contact: contact)
+                                                    ContactRow(person: contact)
                                                 }
                                             }
                                         }
@@ -153,9 +156,7 @@ struct GroupedMBTIView: View {
                     .cornerRadius(30)
                 }
                 
-                Button(action: {
-                    print("Add Contact Sheet")
-                }) {
+                NavigationLink(destination: AddContactView()) {
                     Image(systemName: "plus")
                         .font(.title3.bold())
                         .foregroundColor(.white)
@@ -177,9 +178,18 @@ struct GroupedMBTIView: View {
         )
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            if let userMBTI = currentUser?.mbti {
-                selectedMBTI = userMBTI
-                selectedGroup = MBTIData.mbtiToGroup[userMBTI] ?? "Analyst"
+            if !hasLoaded {
+                if let userMBTI = currentUser?.mbti {
+                    selectedMBTI = userMBTI
+                    selectedGroup = MBTIData.mbtiToGroup[userMBTI] ?? "Analyst"
+                }
+                hasLoaded = true
+            }
+        }
+        .onChange(of: currentUser?.mbti) { oldValue, newValue in
+            if let newMBTI = newValue, oldValue != newValue {
+                selectedGroup = MBTIData.mbtiToGroup[newMBTI] ?? "Analyst"
+                selectedMBTI = newMBTI
             }
         }
     }

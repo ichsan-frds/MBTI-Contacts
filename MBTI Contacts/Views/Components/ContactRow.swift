@@ -8,41 +8,27 @@
 import SwiftUI
 
 struct ContactRow: View {
-    var contact: Contact?
-    var user: User?
+    var person: any Profile
     
-    var isUser: Bool = false
     var displayMbti: Bool = false
     
-    private var firstName: String {
-        contact?.firstName ?? user?.firstName ?? ""
-    }
-    
-    private var lastName: String {
-        contact?.lastName ?? user?.lastName ?? ""
-    }
-    
-    private var mbtiValue: String {
-        contact?.mbti ?? user?.mbti ?? ""
-    }
-    
     var body: some View {
-        NavigationLink(destination: destinationView) {
+        NavigationLink(destination: ContactDetailView(person: person)) {
             HStack(spacing: 14) {
                 
                 ZStack {
                     Circle()
                         .fill(Color.black.opacity(0.25))
                         .frame(width: 46, height: 46)
-                    Text("\(firstName.prefix(1).uppercased())\(lastName.prefix(1).uppercased())")
+                    Text("\(person.firstName.prefix(1).uppercased())\(person.lastName.prefix(1).uppercased())")
                         .font(.system(size: 16, weight: .bold))
                         .foregroundColor(.white)
                 }
 
-                if isUser {
+                if person is User {
                     
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("\(firstName) \(lastName)")
+                        Text("\(person.firstName) \(person.lastName)")
                             .font(.headline)
                             .foregroundColor(.white)
                         
@@ -54,15 +40,22 @@ struct ContactRow: View {
                     
                 } else {
                     
-                    Text("\(firstName) \(lastName)")
+                    Text("\(person.firstName) \(person.lastName)")
                         .font(.headline)
                         .foregroundColor(.white)
                     
                     if displayMbti {
                         Spacer()
-                        Text(mbtiValue)
+                        Text(person.mbti)
                             .font(.headline.bold())
-                            .foregroundColor(.secondary)
+                            .foregroundStyle(LinearGradient(
+                                colors: [
+                                    MBTIData.colors[person.mbti] ?? Color.purple,
+                                    MBTIData.darkColors[person.mbti] ?? Color.purple.opacity(0.5)
+                                ],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            ))
                     } else {
                         Spacer()
                     }
@@ -72,22 +65,11 @@ struct ContactRow: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
         
-        if !isUser {
+        if person is Contact {
             Divider()
                 .background(Color.white.opacity(0.5))
                 .padding(.leading, 76)
                 .padding(.trailing, 20)
-        }
-    }
-    
-    @ViewBuilder
-    private var destinationView: some View {
-        if let contact = contact {
-            ContactDetailView(contact: contact)
-        } else if let user = user {
-            Text("User Profile View for \(user.firstName)")
-        } else {
-            EmptyView()
         }
     }
 }

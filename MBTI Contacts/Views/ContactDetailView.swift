@@ -8,23 +8,23 @@
 import SwiftUI
 
 struct ContactDetailView: View {
-    let contact: Contact
-
+    let person: any Profile
+    
     var body: some View {
         VStack(spacing: 0) {
-
+            
             TabView {
                 ZStack {
                     Circle()
                         .frame(width: 200, height: 200)
                         .foregroundColor(Color.white.opacity(0.15))
-                    Text("\(contact.firstName.prefix(1).uppercased())\(contact.lastName.prefix(1).uppercased())")
+                    Text("\(person.firstName.prefix(1).uppercased())\(person.lastName.prefix(1).uppercased())")
                         .font(.system(size: 80, weight: .bold))
                         .foregroundColor(.white)
                 }
-
+                
                 VStack(spacing: 12) {
-                    Image(contact.mbti)
+                    Image(person.mbti)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 160, height: 160)
@@ -36,59 +36,80 @@ struct ContactDetailView: View {
             .frame(width: 220, height: 240)
             .padding(.top, 20)
             .padding(.bottom, 10)
-
+            
             ScrollView {
                 VStack(spacing: 15) {
                     VStack(spacing: 10) {
-                        Text("\(contact.firstName) \(contact.lastName)")
+                        Text("\(person.firstName) \(person.lastName)")
                             .font(.title.bold())
                             .foregroundColor(.white)
-
-                        Text("\(contact.mbti)")
+                        
+                        Text("\(person.mbti)")
                             .font(.title2.bold())
-                            .foregroundColor(MBTIData.colors[contact.mbti] ?? .secondary)
+                            .foregroundColor(MBTIData.colors[person.mbti] ?? .secondary)
                     }
                     .padding(.bottom, 15)
-
-                    HStack(spacing: 20) {
-                        ZStack {
-                            Circle().frame(width: 70, height: 70).foregroundColor(Color.white.opacity(0.1))
-                            Image(systemName: "message").font(.system(size: 28)).foregroundColor(.white)
+                    
+                    if person is Contact {
+                        HStack(spacing: 20) {
+                            ZStack {
+                                Circle().frame(width: 70, height: 70).foregroundColor(Color.white.opacity(0.1))
+                                Image(systemName: "message").font(.system(size: 28)).foregroundColor(.white)
+                            }
+                            ZStack {
+                                Circle().frame(width: 70, height: 70).foregroundColor(Color.white.opacity(0.1))
+                                Image(systemName: "phone").font(.system(size: 28)).foregroundColor(.white)
+                            }
+                            ZStack {
+                                Circle().frame(width: 70, height: 70).foregroundColor(Color.white.opacity(0.1))
+                                Image(systemName: "video").font(.system(size: 28)).foregroundColor(.white)
+                            }
                         }
-                        ZStack {
-                            Circle().frame(width: 70, height: 70).foregroundColor(Color.white.opacity(0.1))
-                            Image(systemName: "phone").font(.system(size: 28)).foregroundColor(.white)
-                        }
-                        ZStack {
-                            Circle().frame(width: 70, height: 70).foregroundColor(Color.white.opacity(0.1))
-                            Image(systemName: "video").font(.system(size: 28)).foregroundColor(.white)
+                        
+                        // TODO: destination: CompareMBTIView()
+                        NavigationLink(destination: SearchContactsView()) {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 25)
+                                    .foregroundStyle(Color(red: 1.0, green: 0.87, blue: 0.7))
+                                Text("Compare MBTI")
+                                    .bold()
+                                    .foregroundColor(.black)
+                            }
+                            .frame(height: 65)
+                            .padding(.horizontal, 50)
+                            .padding(.bottom, 20)
                         }
                     }
-
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 25)
-                            .foregroundStyle(Color(red: 1.0, green: 0.87, blue: 0.7))
-                        Text("Compare MBTI")
-                            .bold()
-                            .foregroundColor(.black)
+                    
+                    if person is User {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("First Name").bold().foregroundColor(.white)
+                            Text(person.firstName).foregroundColor(.white.opacity(0.6))
+                            
+                            Divider().background(Color.white.opacity(0.2))
+                            
+                            Text("Last Name").bold().foregroundColor(.white)
+                            Text(person.lastName).foregroundColor(.white.opacity(0.6))
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 15)
+                        .background(RoundedRectangle(cornerRadius: 25).foregroundStyle(Color.white.opacity(0.1)))
                     }
-                    .frame(height: 65)
-                    .padding(.horizontal, 50)
-                    .padding(.bottom, 20)
-
+                    
                     VStack(alignment: .leading, spacing: 6) {
                         Text("Phone").bold().foregroundColor(.white)
-                        Text(contact.phoneNumber).foregroundColor(.white.opacity(0.6))
+                        Text(person.phoneNumber).foregroundColor(.white.opacity(0.6))
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 20)
                     .padding(.vertical, 15)
                     .frame(minHeight: 65)
                     .background(RoundedRectangle(cornerRadius: 25).foregroundStyle(Color.white.opacity(0.1)))
-
+                    
                     VStack(alignment: .leading, spacing: 6) {
                         Text("Personality Description").bold().foregroundColor(.white)
-                        Text(contact.personDescription)
+                        Text(person.desc)
                             .foregroundColor(.white.opacity(0.6))
                             .fixedSize(horizontal: false, vertical: true)
                     }
@@ -97,18 +118,21 @@ struct ContactDetailView: View {
                     .padding(.vertical, 15)
                     .frame(minHeight: 65)
                     .background(RoundedRectangle(cornerRadius: 25).foregroundStyle(Color.white.opacity(0.1)))
-
-                    Button(action: {
-                        print("Delete tapped")
-                    }) {
-                        Text("Delete Contact")
-                            .bold()
-                            .foregroundStyle(.white)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.horizontal, 20)
-                            .padding(.vertical, 15)
-                            .frame(minHeight: 65)
-                            .background(RoundedRectangle(cornerRadius: 25).foregroundStyle(.red))
+                    
+                    if person is Contact {
+                        Button(action: {
+                            // TODO: onDelete Function
+                            print("Delete tapped")
+                        }) {
+                            Text("Delete Contact")
+                                .bold()
+                                .foregroundStyle(.white)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 15)
+                                .frame(minHeight: 65)
+                                .background(RoundedRectangle(cornerRadius: 25).foregroundStyle(.red))
+                        }
                     }
                 }
                 .padding(.horizontal, 30)
@@ -122,11 +146,34 @@ struct ContactDetailView: View {
         .navigationTitle("Contact Detail")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarColorScheme(.dark, for: .navigationBar)
+        .toolbar {
+            if let user = person as? User {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    NavigationLink(destination: EditProfileView(user: user)) {
+                        Image(systemName: "pencil")
+                            .foregroundColor(.white)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
+            }
+        }
     }
 }
 
-#Preview {
+#Preview ("Contact") {
     NavigationStack {
-        ContactDetailView(contact: Contact(firstName: "Andres", lastName: "Iniesta", phoneNumber: "+6212345678990", mbti: "INTJ", personDescription: "Calm and has a great vision in life Calm and has a great vision in life Calm and has a great vision"))
+        ContactDetailView(
+            person: Contact(firstName: "Andres", lastName: "Iniesta", phoneNumber: "+6212345678990", mbti: "INTJ", desc: "Calm and has a great vision in life Calm and has a great vision in life Calm and has a great vision")
+            
+        )
+    }
+}
+
+#Preview ("User") {
+    NavigationStack {
+        ContactDetailView(
+            person: User(firstName: "Ichsan", lastName: "Firdaus", phoneNumber: "+6212345678990", mbti: "INTJ", desc: "Calm and has a great vision in life Calm and has a great vision in life Calm and has a great vision")
+            
+        )
     }
 }

@@ -8,12 +8,16 @@
 import SwiftUI
 
 struct ChooseMBTIView: View {
-    let firstName: String
-    let lastName: String
-    let phoneNumber: String
+    var firstName: String = ""
+    var lastName: String = ""
+    var phoneNumber: String = ""
+    
+    var editmbtiBinding: Binding<String>? = nil
     
     @State private var selectedCategory: String = "Analyst"
     @State private var selectedMBTI: String = "INTJ"
+    
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         VStack {
@@ -67,17 +71,40 @@ struct ChooseMBTIView: View {
             
             Spacer()
             
-            NavigationLink(destination: UserDescriptionView(firstName: firstName, lastName: lastName, phoneNumber: phoneNumber, mbti: selectedMBTI)) {
-                Text("Next")
-                    .font(.headline)
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.black)
-                    .cornerRadius(12)
+            if let editmbtiBinding = editmbtiBinding {
+                Button(action: {
+                    editmbtiBinding.wrappedValue = selectedMBTI
+                    dismiss()
+                }) {
+                    Text("Change")
+                        .font(.headline)
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.black)
+                        .cornerRadius(12)
+                }
+                .padding(.horizontal, 30)
+                .padding(.bottom, 20)
+                
+            } else {
+                NavigationLink(destination: UserDescriptionView(
+                    firstName: firstName,
+                    lastName: lastName,
+                    phoneNumber: phoneNumber,
+                    mbti: selectedMBTI
+                )) {
+                    Text("Next")
+                        .font(.headline)
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.black)
+                        .cornerRadius(12)
+                }
+                .padding(.horizontal, 30)
+                .padding(.bottom, 20)
             }
-            .padding(.horizontal, 30)
-            .padding(.bottom, 20)
         }
         .navigationTitle("Choose Your MBTI")
         .navigationBarTitleDisplayMode(.inline)
@@ -87,11 +114,23 @@ struct ChooseMBTIView: View {
             Color(red: 0.16, green: 0.16, blue: 0.18)
                 .ignoresSafeArea()
         )
+        .onAppear {
+            if let currentMBTI = editmbtiBinding?.wrappedValue {
+                selectedMBTI = currentMBTI
+            }
+            selectedCategory = MBTIData.mbtiToGroup[selectedMBTI] ?? "Analyst"
+        }
     }
 }
 
-#Preview {
+#Preview("Registration Mode") {
     NavigationStack {
         ChooseMBTIView(firstName: "Ichsan", lastName: "Firdaus", phoneNumber: "+6285959808110")
+    }
+}
+
+#Preview("Edit Mode") {
+    NavigationStack {
+        ChooseMBTIView(editmbtiBinding: .constant("ENFP"))
     }
 }

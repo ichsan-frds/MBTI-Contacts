@@ -55,7 +55,7 @@ struct SearchContactsView: View {
                                     .padding(.horizontal, 20)
                                 
                                 ForEach(groupedContacts[letter] ?? [], id: \.phoneNumber) { contact in
-                                    ContactRow(contact: contact, displayMbti: true, isDark: true)
+                                    ContactRow(person: contact, displayMbti: true)
                                 }
                             }
                         }

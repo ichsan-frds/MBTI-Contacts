@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class User {
+final class User: Profile {
     var firstName: String
     var lastName: String
     var phoneNumber: String
