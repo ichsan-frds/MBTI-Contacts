@@ -62,10 +62,10 @@ struct RegisterView : View {
                 NavigationLink(destination: ChooseMBTIView(firstName: firstName, lastName: lastName, phoneNumber: phoneNumber)) {
                     Text("Next")
                         .font(.headline)
-                        .foregroundStyle(.white)
+                        .foregroundStyle(firstName.isEmpty || lastName.isEmpty || phoneNumber.isEmpty ? Color.white : Color.black)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(firstName.isEmpty || lastName.isEmpty || phoneNumber.isEmpty ? Color.gray : Color.black)
+                        .background(firstName.isEmpty || lastName.isEmpty || phoneNumber.isEmpty ? Color.gray : Color(red: 1.0, green: 0.87, blue: 0.7))
                         .cornerRadius(12)
                 }
                 .disabled(firstName.isEmpty || lastName.isEmpty || phoneNumber.isEmpty)

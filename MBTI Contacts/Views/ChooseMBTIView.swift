@@ -78,10 +78,10 @@ struct ChooseMBTIView: View {
                 }) {
                     Text("Change")
                         .font(.headline)
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.black)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.black)
+                        .background(Color(red: 1.0, green: 0.87, blue: 0.7))
                         .cornerRadius(12)
                 }
                 .padding(.horizontal, 30)
@@ -96,10 +96,10 @@ struct ChooseMBTIView: View {
                 )) {
                     Text("Next")
                         .font(.headline)
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.black)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.black)
+                        .background(Color(red: 1.0, green: 0.87, blue: 0.7))
                         .cornerRadius(12)
                 }
                 .padding(.horizontal, 30)

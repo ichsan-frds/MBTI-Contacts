@@ -50,7 +50,7 @@ struct ContactDetailView: View {
                     }
                     .padding(.bottom, 15)
                     
-                    if person is Contact {
+                    if let contact = person as? Contact {
                         HStack(spacing: 20) {
                             ZStack {
                                 Circle().frame(width: 70, height: 70).foregroundColor(Color.white.opacity(0.1))
@@ -66,8 +66,7 @@ struct ContactDetailView: View {
                             }
                         }
                         
-                        // TODO: destination: CompareMBTIView()
-                        NavigationLink(destination: SearchContactsView()) {
+                        NavigationLink(destination: CompareMBTIView(contact: contact)) {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 25)
                                     .foregroundStyle(Color(red: 1.0, green: 0.87, blue: 0.7))

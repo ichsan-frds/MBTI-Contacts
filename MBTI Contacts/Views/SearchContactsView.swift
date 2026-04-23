@@ -6,12 +6,15 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SearchContactsView: View {
     var initialSearchText: String = ""
 
-    @State private var contacts: [Contact] = ContactSeeder.defaultContacts
+    @Query private var contacts: [Contact]
+    
     @State private var searchText: String = ""
+    @State private var isShowingAddContactSheet = false
     
     @FocusState private var isSearchFocused: Bool
     
@@ -86,13 +89,19 @@ struct SearchContactsView: View {
                 .background(Color.white.opacity(0.1))
                 .cornerRadius(30)
                 
-                NavigationLink(destination: AddContactView()) {
+                Button(action: {
+                    isShowingAddContactSheet = true
+                }) {
                     Image(systemName: "plus")
                         .font(.title3.bold())
                         .foregroundColor(.white)
-                        .padding(15)
+                        .padding(14)
                         .background(Color.white.opacity(0.15))
                         .cornerRadius(999)
+                }
+                .sheet(isPresented: $isShowingAddContactSheet) {
+                    AddContact()
+                        .presentationDetents([.fraction(0.3)])
                 }
             }
             .padding(.horizontal, 20)
@@ -116,7 +125,15 @@ struct SearchContactsView: View {
 }
 
 #Preview {
-    NavigationStack {
-        SearchContactsView()
-    }
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try! ModelContainer(for: Contact.self, User.self, configurations: config)
+        
+        for contact in ContactSeeder.defaultContacts {
+            container.mainContext.insert(contact)
+        }
+        
+        return NavigationStack {
+            SearchContactsView()
+        }
+        .modelContainer(container)
 }

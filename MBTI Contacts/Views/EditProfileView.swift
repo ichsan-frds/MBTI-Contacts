@@ -65,10 +65,10 @@ struct EditProfileView: View {
                 NavigationLink(destination: ChooseMBTIView(editmbtiBinding: $user.mbti)) {
                     Text("Change MBTI")
                         .font(.headline.bold())
-                        .foregroundColor(.white)
+                        .foregroundColor(.black)
                         .padding(.horizontal, 25)
                         .padding(.vertical, 15)
-                        .background(Color.white.opacity(0.2))
+                        .background(Color(red: 1.0, green: 0.87, blue: 0.7))
                         .cornerRadius(999)
                 }
                 .buttonStyle(PlainButtonStyle())

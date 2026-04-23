@@ -49,7 +49,7 @@ struct MBTIData {
         "ESTP": Color(red: 1.0,  green: 0.7,  blue: 0.2),
         "ESFP": Color(red: 1.0,  green: 0.7,  blue: 0.2)
     ]
-
+    
     static let darkColors: [String: Color] = [
         "INTJ": Color(red: 0.4,  green: 0.1,  blue: 0.6),
         "INTP": Color(red: 0.4,  green: 0.1,  blue: 0.6),
@@ -90,4 +90,22 @@ struct MBTIData {
         "ESTP": "The ESTP is an energetic and perceptive doer. They love taking action and thrive in fast-paced environments.",
         "ESFP": "The ESFP is a spontaneous and fun-loving entertainer. They bring joy and energy wherever they go."
     ]
+    
+    static let possibleMBTIs: [String] = Array(descriptions.keys)
+    
+    static let possibleDescs: [String] = [
+        "Calm and has a great vision in life.",
+        "Strong and specialized in long range goals",
+        "Quick reflexes and always ready to act",
+        "Kind and always gives a helping hand to other people",
+        "Likes to solve problems and always try to find a solution",
+    ]
+    
+    static var randomMBTI: String {
+        possibleMBTIs.randomElement() ?? "INTJ"
+    }
+    
+    static var randomDesc: String {
+        possibleDescs.randomElement() ?? "No description yet."
+    }
 }

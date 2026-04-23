@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct GroupedMBTIView: View {
+    @Query private var contacts: [Contact]
     @Query private var users: [User]
     private var currentUser: User? {
         users.first
@@ -16,8 +17,9 @@ struct GroupedMBTIView: View {
     
     @State private var selectedGroup: String = "Analyst"
     @State private var selectedMBTI: String = "INTJ"
-    @State private var contacts: [Contact] = ContactSeeder.defaultContacts
+    
     @State private var hasLoaded: Bool = false
+    @State private var isShowingAddContactSheet = false
     
     var body: some View {
         VStack(spacing: 16) {
@@ -156,13 +158,19 @@ struct GroupedMBTIView: View {
                     .cornerRadius(30)
                 }
                 
-                NavigationLink(destination: AddContactView()) {
+                Button(action: {
+                    isShowingAddContactSheet = true
+                }) {
                     Image(systemName: "plus")
                         .font(.title3.bold())
                         .foregroundColor(.white)
                         .padding(14)
                         .background(Color.white.opacity(0.15))
                         .cornerRadius(999)
+                }
+                .sheet(isPresented: $isShowingAddContactSheet) {
+                    AddContact()
+                        .presentationDetents([.fraction(0.3)])
                 }
             }
             .padding(.horizontal, 20)
@@ -192,11 +200,29 @@ struct GroupedMBTIView: View {
                 selectedMBTI = newMBTI
             }
         }
+        .onChange(of: contacts) { oldValue, newValue in
+            if newValue.count > oldValue.count {
+                
+                if let addedContact = newValue.first(where: { !oldValue.contains($0) }) {
+                    
+                    selectedGroup = MBTIData.mbtiToGroup[addedContact.mbti] ?? "Analyst"
+                    selectedMBTI = addedContact.mbti
+                }
+            }
+        }
     }
 }
 
 #Preview {
-    NavigationStack {
-        GroupedMBTIView()
-    }
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try! ModelContainer(for: Contact.self, User.self, configurations: config)
+        
+        for contact in ContactSeeder.defaultContacts {
+            container.mainContext.insert(contact)
+        }
+        
+        return NavigationStack {
+            GroupedMBTIView()
+        }
+        .modelContainer(container)
 }
