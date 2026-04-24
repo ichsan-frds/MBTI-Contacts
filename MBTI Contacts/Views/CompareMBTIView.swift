@@ -36,45 +36,64 @@ struct CompareMBTIView : View {
                     .scaleEffect(x: -1, y: 1)
                     .zIndex(0)
             }
-            
-            HStack(spacing: -30) {
-                Text(currentUser.mbti)
-                    .bold()
-                    .frame(maxWidth: .infinity)
-                    .padding(10)
-                    .foregroundStyle(.white)
-                    .background(LinearGradient(
-                        colors: [
-                            MBTIData.colors[currentUser.mbti] ?? Color.purple,
-                            MBTIData.darkColors[currentUser.mbti] ?? Color.purple.opacity(0.5)
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    ))
-                    .clipShape(UnevenRoundedRectangle(
-                        topLeadingRadius: 20,
-                        bottomLeadingRadius: 20,
-                        bottomTrailingRadius: 0,
-                        topTrailingRadius: 0
-                    ))
-                    .zIndex(0)
-                
-                Text(contact.mbti)
-                    .bold()
-                    .frame(maxWidth: .infinity)
-                    .padding(10)
-                    .foregroundStyle(.white)
-                    .background(LinearGradient(
-                        colors: [
-                            MBTIData.colors[contact.mbti] ?? Color.purple,
-                            MBTIData.darkColors[contact.mbti] ?? Color.purple.opacity(0.5)
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    ))
-                    .cornerRadius(999)
+            if currentUser.mbti == contact.mbti {
+                HStack(spacing: -30) {
+                    Text(contact.mbti)
+                        .bold()
+                        .frame(maxWidth: .infinity)
+                        .padding(10)
+                        .foregroundStyle(.white)
+                        .background(LinearGradient(
+                            colors: [
+                                MBTIData.colors[contact.mbti] ?? Color.purple,
+                                MBTIData.darkColors[contact.mbti] ?? Color.purple.opacity(0.5)
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        ))
+                        .cornerRadius(999)
+                }
+                .padding(.horizontal, 70)
+            } else {
+                HStack(spacing: -30) {
+                    Text(currentUser.mbti)
+                        .bold()
+                        .frame(maxWidth: .infinity)
+                        .padding(10)
+                        .foregroundStyle(.white)
+                        .background(LinearGradient(
+                            colors: [
+                                MBTIData.colors[currentUser.mbti] ?? Color.purple,
+                                MBTIData.darkColors[currentUser.mbti] ?? Color.purple.opacity(0.5)
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        ))
+                        .clipShape(UnevenRoundedRectangle(
+                            topLeadingRadius: 20,
+                            bottomLeadingRadius: 20,
+                            bottomTrailingRadius: 0,
+                            topTrailingRadius: 0
+                        ))
+                        .zIndex(0)
+                    
+                    Text(contact.mbti)
+                        .bold()
+                        .frame(maxWidth: .infinity)
+                        .padding(10)
+                        .foregroundStyle(.white)
+                        .background(LinearGradient(
+                            colors: [
+                                MBTIData.colors[contact.mbti] ?? Color.purple,
+                                MBTIData.darkColors[contact.mbti] ?? Color.purple.opacity(0.5)
+                            ],
+                            startPoint: .top,
+                            endPoint: .bottom
+                        ))
+                        .cornerRadius(999)
+                }
+                .padding(.horizontal, 70)
             }
-            .padding(.horizontal, 70)
             
             VStack(alignment: .leading, spacing: 10) {
                 Text("Comparison Insight")
@@ -116,6 +135,6 @@ struct CompareMBTIView : View {
 
 #Preview {
     NavigationStack {
-        CompareMBTIView(contact: Contact(firstName: "Andres", lastName: "Iniesta", phoneNumber: "+6212345678990", mbti: "INFJ", desc: "Calm and has a great vision in life Calm and has a great vision in life Calm and has a great vision"))
+        CompareMBTIView(contact: Contact(firstName: "Andres", lastName: "Iniesta", phoneNumber: "+6212345678990", mbti: "ENFJ", desc: "Calm and has a great vision in life Calm and has a great vision in life Calm and has a great vision"))
     }
 }

@@ -6,9 +6,13 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContactDetailView: View {
     let person: any Profile
+    
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         VStack(spacing: 0) {
@@ -120,8 +124,11 @@ struct ContactDetailView: View {
                     
                     if person is Contact {
                         Button(action: {
-                            // TODO: onDelete Function
-                            print("Delete tapped")
+                            if let contactToDelete = person as? Contact {
+                                modelContext.delete(contactToDelete)
+                                
+                                dismiss()
+                            }
                         }) {
                             Text("Delete Contact")
                                 .bold()
