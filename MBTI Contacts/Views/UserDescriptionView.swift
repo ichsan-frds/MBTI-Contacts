@@ -89,6 +89,9 @@ struct UserDescriptionView: View {
             Color(red: 0.16, green: 0.16, blue: 0.18)
                 .ignoresSafeArea()
         )
+        .onTapGesture {
+            hideKeyboard()
+        }
     }
     
     private func saveUser() {
@@ -100,6 +103,10 @@ struct UserDescriptionView: View {
             desc: textInput
         )
         modelContext.insert(newUser)
+    }
+    
+    private func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
 

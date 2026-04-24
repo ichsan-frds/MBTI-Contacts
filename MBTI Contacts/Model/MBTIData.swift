@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct MBTIData {
     static let mbtiGroups: [String] = ["Analyst", "Diplomats", "Sentinels", "Explorers"]
@@ -107,5 +108,30 @@ struct MBTIData {
     
     static var randomDesc: String {
         possibleDescs.randomElement() ?? "Mysterious Person."
+    }
+    
+    @MainActor
+    static func seedData(context: ModelContext) {
+        let defaults = UserDefaults.standard
+        let hasSeeded = defaults.bool(forKey: "hasSeededData")
+        
+        if hasSeeded {
+            print("Data already seeded previously. Skipping.")
+            return // Exit the function entirely
+        }
+        
+        do {
+            for contact in ContactSeeder.defaultContacts {
+                context.insert(contact)
+            }
+            
+            try context.save()
+            
+            defaults.set(true, forKey: "hasSeededData")
+            print("Successfully seeded initial contacts and set flag.")
+            
+        } catch {
+            print("Failed to seed database: \(error)")
+        }
     }
 }
