@@ -26,13 +26,13 @@ struct CompareMBTIView : View {
                 Image(currentUser.mbti)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 275, height: 275)
+                    .frame(width: .infinity)
                     .zIndex(1)
                 
                 Image(contact.mbti)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 275, height: 275)
+                    .frame(width: .infinity)
                     .scaleEffect(x: -1, y: 1)
                     .zIndex(0)
             }
@@ -53,7 +53,7 @@ struct CompareMBTIView : View {
                         ))
                         .cornerRadius(999)
                 }
-                .padding(.horizontal, 70)
+                .padding(.horizontal)
             } else {
                 HStack(spacing: -30) {
                     Text(currentUser.mbti)
@@ -92,10 +92,10 @@ struct CompareMBTIView : View {
                         ))
                         .cornerRadius(999)
                 }
-                .padding(.horizontal, 70)
+                .padding(.horizontal)
             }
             
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(alignment: .leading, spacing: 15) {
                 Text("Comparison Insight")
                     .bold()
                     .foregroundColor(.white)
@@ -120,7 +120,7 @@ struct CompareMBTIView : View {
             .padding(.vertical, 15)
             .frame(minHeight: 65)
             .background(RoundedRectangle(cornerRadius: 25).foregroundStyle(Color.white.opacity(0.1)))
-            .padding(.horizontal, 70)
+            .padding(.horizontal)
         }
         .navigationTitle("Compare MBTI")
         .navigationBarTitleDisplayMode(.inline)
