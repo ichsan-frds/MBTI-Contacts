@@ -10,7 +10,7 @@ import SwiftData
 
 struct SearchContactsView: View {
     var initialSearchText: String = ""
-
+    
     @Query private var contacts: [Contact]
     
     @State private var searchText: String = ""
@@ -90,14 +90,22 @@ struct SearchContactsView: View {
                 .cornerRadius(30)
                 
                 Button(action: {
-                    isShowingAddContactSheet = true
+                    if isSearchFocused {
+                        searchText = ""
+                        isSearchFocused = false
+                        
+                    } else {
+                        isShowingAddContactSheet = true
+                    }
                 }) {
-                    Image(systemName: "plus")
+                    Image(systemName: isSearchFocused ? "xmark" : "plus")
                         .font(.title3.bold())
+                        .frame(width: 20, height: 20)
                         .foregroundColor(.white)
                         .padding(14)
                         .background(Color.white.opacity(0.15))
                         .cornerRadius(999)
+                        .contentTransition(.symbolEffect(.replace))
                 }
                 .sheet(isPresented: $isShowingAddContactSheet) {
                     AddContact()
@@ -129,14 +137,14 @@ struct SearchContactsView: View {
 
 #Preview {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try! ModelContainer(for: Contact.self, User.self, configurations: config)
-        
-        for contact in ContactSeeder.defaultContacts {
-            container.mainContext.insert(contact)
-        }
-        
-        return NavigationStack {
-            SearchContactsView()
-        }
-        .modelContainer(container)
+    let container = try! ModelContainer(for: Contact.self, User.self, configurations: config)
+    
+    for contact in ContactSeeder.defaultContacts {
+        container.mainContext.insert(contact)
+    }
+    
+    return NavigationStack {
+        SearchContactsView()
+    }
+    .modelContainer(container)
 }
