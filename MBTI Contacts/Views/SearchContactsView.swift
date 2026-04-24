@@ -121,6 +121,9 @@ struct SearchContactsView: View {
                 isSearchFocused = true
             }
         }
+        .onTapGesture {
+            hideKeyboard()
+        }
     }
 }
 
