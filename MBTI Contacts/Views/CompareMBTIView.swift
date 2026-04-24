@@ -16,6 +16,10 @@ struct CompareMBTIView : View {
             users.first ?? User(firstName: "User", lastName: "", phoneNumber: "", mbti: "INTJ", desc: "")
         }
     
+    private var archetype: RelationshipArchetype {
+            ComparisonEngine.getArchetype(user1: currentUser.mbti, user2: contact.mbti)
+        }
+    
     var body : some View {
         VStack(spacing: 20) {
             HStack(spacing: -40) {
@@ -73,92 +77,22 @@ struct CompareMBTIView : View {
             .padding(.horizontal, 70)
             
             VStack(alignment: .leading, spacing: 10) {
-                Text("Comparison Insight").bold().foregroundColor(.white)
-                HStack(alignment: .top, spacing: 12) {
-                    VStack {
-                        Image(systemName: "brain.filled.head.profile")
-                            .font(.largeTitle.bold())
-                        
-                        Text("Cognitive")
-                            .font(.caption)
-                    }
-                    .frame(width: 60)
-                    
-                    ScrollView(showsIndicators: true) {
-                        Text("Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium")
-                            .font(.caption)
-                            .foregroundColor(.white.opacity(0.6))
-                            .multilineTextAlignment(.leading)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .frame(maxHeight: .infinity)
-                }
+                Text("Comparison Insight")
+                    .bold()
+                    .foregroundColor(.white)
+                ComparisonRow(icon: "brain.filled.head.profile", title: "Cognitive", category: .cognitive, archetype: archetype)
                 
                 Divider().background(Color.white.opacity(0.3))
                 
-                HStack(alignment: .top, spacing: 12) {
-                    VStack {
-                        Image(systemName: "person.2.badge.gearshape")
-                            .font(.largeTitle.bold())
-                        
-                        Text("Intuition")
-                            .font(.caption)
-                    }
-                    .frame(width: 60)
-                    
-                    ScrollView(showsIndicators: true) {
-                        Text("Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam. Sed ut perspiciatis unde")
-                            .font(.caption)
-                            .foregroundColor(.white.opacity(0.6))
-                            .multilineTextAlignment(.leading)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .frame(maxHeight: .infinity)
-                }
+                ComparisonRow(icon: "person.2.badge.gearshape", title: "Teamwork", category: .teamwork, archetype: archetype)
                 
                 Divider().background(Color.white.opacity(0.3))
                 
-                HStack(alignment: .top, spacing: 12) {
-                    VStack {
-                        Image(systemName: "bubble.left.and.text.bubble.right")
-                            .font(.largeTitle.bold())
-                        
-                        Text("Social")
-                            .font(.caption)
-                    }
-                    .frame(width: 60)
-                    
-                    ScrollView(showsIndicators: true) {
-                        Text("Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.")
-                            .font(.caption)
-                            .foregroundColor(.white.opacity(0.6))
-                            .multilineTextAlignment(.leading)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .frame(maxHeight: .infinity)
-                }
+                ComparisonRow(icon: "bubble.left.and.text.bubble.right", title: "Social", category: .social, archetype: archetype)
                 
                 Divider().background(Color.white.opacity(0.3))
                 
-                HStack(alignment: .top, spacing: 12) {
-                    VStack {
-                        Image(systemName: "scalemass.fill")
-                            .font(.largeTitle.bold())
-                        
-                        Text("Decision")
-                            .font(.caption)
-                    }
-                    .frame(width: 60)
-                    
-                    ScrollView(showsIndicators: true) {
-                        Text("Sed ut")
-                            .font(.caption)
-                            .foregroundColor(.white.opacity(0.6))
-                            .multilineTextAlignment(.leading)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .frame(maxHeight: .infinity)
-                }
+                ComparisonRow(icon: "scalemass.fill", title: "Decision", category: .decision, archetype: archetype)
                 
             }
             .foregroundStyle(.white)
@@ -182,6 +116,6 @@ struct CompareMBTIView : View {
 
 #Preview {
     NavigationStack {
-        CompareMBTIView(contact: Contact(firstName: "Andres", lastName: "Iniesta", phoneNumber: "+6212345678990", mbti: "ENFJ", desc: "Calm and has a great vision in life Calm and has a great vision in life Calm and has a great vision"))
+        CompareMBTIView(contact: Contact(firstName: "Andres", lastName: "Iniesta", phoneNumber: "+6212345678990", mbti: "INFJ", desc: "Calm and has a great vision in life Calm and has a great vision in life Calm and has a great vision"))
     }
 }

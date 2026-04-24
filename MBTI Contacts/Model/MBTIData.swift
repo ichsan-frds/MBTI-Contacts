@@ -106,6 +106,6 @@ struct MBTIData {
     }
     
     static var randomDesc: String {
-        possibleDescs.randomElement() ?? "No description yet."
+        possibleDescs.randomElement() ?? "Mysterious Person."
     }
 }
