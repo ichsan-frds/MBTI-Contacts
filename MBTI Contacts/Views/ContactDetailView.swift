@@ -15,33 +15,32 @@ struct ContactDetailView: View {
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
-        VStack(spacing: 0) {
-            
-            TabView {
-                ZStack {
-                    Circle()
-                        .frame(width: 200, height: 200)
-                        .foregroundColor(Color.white.opacity(0.15))
-                    Text("\(person.firstName.prefix(1).uppercased())\(person.lastName.prefix(1).uppercased())")
-                        .font(.system(size: 80, weight: .bold))
-                        .foregroundColor(.white)
+        ScrollView {
+            VStack(spacing: 0) {
+                TabView {
+                    ZStack {
+                        Circle()
+                            .frame(width: 200, height: 200)
+                            .foregroundColor(Color.white.opacity(0.15))
+                        Text("\(person.firstName.prefix(1).uppercased())\(person.lastName.prefix(1).uppercased())")
+                            .font(.system(size: 80, weight: .bold))
+                            .foregroundColor(.white)
+                    }
+                    
+                    VStack(spacing: 12) {
+                        Image(person.mbti)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 160, height: 160)
+                            .clipShape(Circle())
+                    }
                 }
+                .tabViewStyle(.page(indexDisplayMode: .always))
+                .indexViewStyle(.page(backgroundDisplayMode: .always))
+                .frame(width: 220, height: 240)
+                .padding(.top, 20)
+                .padding(.bottom, 10)
                 
-                VStack(spacing: 12) {
-                    Image(person.mbti)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 160, height: 160)
-                        .clipShape(Circle())
-                }
-            }
-            .tabViewStyle(.page(indexDisplayMode: .always))
-            .indexViewStyle(.page(backgroundDisplayMode: .always))
-            .frame(width: 220, height: 240)
-            .padding(.top, 20)
-            .padding(.bottom, 10)
-            
-            ScrollView {
                 VStack(spacing: 15) {
                     VStack(spacing: 10) {
                         Text("\(person.firstName) \(person.lastName)")

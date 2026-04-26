@@ -114,12 +114,12 @@ struct GroupedMBTIView: View {
                                                 .padding(.bottom, 4)
                                                 
                                                 Divider()
-                                                    .background(Color.white.opacity(0.5))
+                                                    .background(selectedGroup == "Diplomats" || selectedGroup == "Explorers" ? Color.white.opacity(0.9) : Color.white.opacity(0.5))
                                                     .padding(.leading, 15)
                                                     .padding(.trailing, 20)
                                                 
                                                 ForEach(groupedContacts[letter] ?? [], id: \.phoneNumber) { contact in
-                                                    ContactRow(person: contact)
+                                                    ContactRow(person: contact, selectedGroup: selectedGroup)
                                                 }
                                             }
                                         }

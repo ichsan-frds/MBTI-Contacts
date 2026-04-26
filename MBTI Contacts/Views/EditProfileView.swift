@@ -15,67 +15,66 @@ struct EditProfileView: View {
     @Environment(\.modelContext) private var modelContext
     
     var body: some View {
-        VStack(spacing: 0) {
-            
-            TabView {
-                ZStack {
-                    Circle()
+        ScrollView {
+            VStack(spacing: 0) {
+                TabView {
+                    ZStack {
+                        Circle()
+                            .frame(width: 160, height: 160)
+                            .foregroundColor(Color.white.opacity(0.15))
+                        Text("\(user.firstName.prefix(1).uppercased())\(user.lastName.prefix(1).uppercased())")
+                            .font(.system(size: 60, weight: .bold))
+                            .foregroundColor(.white)
+                    }
+                    
+                    Image(user.mbti)
+                        .resizable()
+                        .scaledToFit()
                         .frame(width: 160, height: 160)
-                        .foregroundColor(Color.white.opacity(0.15))
-                    Text("\(user.firstName.prefix(1).uppercased())\(user.lastName.prefix(1).uppercased())")
-                        .font(.system(size: 60, weight: .bold))
+                }
+                .tabViewStyle(.page(indexDisplayMode: .always))
+                .indexViewStyle(.page(backgroundDisplayMode: .always))
+                .frame(width: 180, height: 200)
+                .padding(.top, 20)
+                
+                VStack(spacing: 4) {
+                    Text(user.firstName)
+                        .font(.title2.bold())
                         .foregroundColor(.white)
+                    Text(user.mbti)
+                        .font(.headline)
+                        .foregroundColor(MBTIData.colors[user.mbti] ?? .secondary)
                 }
+                .padding(.top, 12)
+                .padding(.bottom, 16)
                 
-                Image(user.mbti)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 160, height: 160)
-            }
-            .tabViewStyle(.page(indexDisplayMode: .always))
-            .indexViewStyle(.page(backgroundDisplayMode: .always))
-            .frame(width: 180, height: 200)
-            .padding(.top, 20)
-            
-            VStack(spacing: 4) {
-                Text(user.firstName)
-                    .font(.title2.bold())
-                    .foregroundColor(.white)
-                Text(user.mbti)
-                    .font(.headline)
-                    .foregroundColor(MBTIData.colors[user.mbti] ?? .secondary)
-            }
-            .padding(.top, 12)
-            .padding(.bottom, 16)
-            
-            HStack(spacing: 12) {
-                // TODO: (OPTIONAL) Edit Contact Model Schema so User can Edit Photo
-                //                Button(action: {
-                //                    print("Edit Photo tapped")
-                //                }) {
-                //                    Text("Edit Photo")
-                //                        .font(.subheadline.bold())
-                //                        .foregroundColor(.white)
-                //                        .padding(.horizontal, 20)
-                //                        .padding(.vertical, 10)
-                //                        .background(Color.white.opacity(0.2))
-                //                        .cornerRadius(999)
-                //                }
-                
-                NavigationLink(destination: ChooseMBTIView(editmbtiBinding: $user.mbti)) {
-                    Text("Change MBTI")
-                        .font(.headline.bold())
-                        .foregroundColor(.black)
-                        .padding(.horizontal, 25)
-                        .padding(.vertical, 15)
-                        .background(Color(red: 1.0, green: 0.87, blue: 0.7))
-                        .cornerRadius(999)
+                HStack(spacing: 12) {
+                    // TODO: (OPTIONAL) Edit Contact Model Schema so User can Edit Photo
+                    //                Button(action: {
+                    //                    print("Edit Photo tapped")
+                    //                }) {
+                    //                    Text("Edit Photo")
+                    //                        .font(.subheadline.bold())
+                    //                        .foregroundColor(.white)
+                    //                        .padding(.horizontal, 20)
+                    //                        .padding(.vertical, 10)
+                    //                        .background(Color.white.opacity(0.2))
+                    //                        .cornerRadius(999)
+                    //                }
+                    
+                    NavigationLink(destination: ChooseMBTIView(editmbtiBinding: $user.mbti)) {
+                        Text("Change MBTI")
+                            .font(.headline.bold())
+                            .foregroundColor(.black)
+                            .padding(.horizontal, 25)
+                            .padding(.vertical, 15)
+                            .background(Color(red: 1.0, green: 0.87, blue: 0.7))
+                            .cornerRadius(999)
+                    }
+                    .buttonStyle(PlainButtonStyle())
                 }
-                .buttonStyle(PlainButtonStyle())
-            }
-            .padding(.bottom, 20)
-            
-            ScrollView {
+                .padding(.bottom, 20)
+                
                 VStack(spacing: 15) {
                     
                     VStack(alignment: .leading, spacing: 10) {
@@ -131,6 +130,9 @@ struct EditProfileView: View {
                         .font(.title3)
                 }
             }
+        }
+        .onTapGesture {
+            hideKeyboard()
         }
     }
 }

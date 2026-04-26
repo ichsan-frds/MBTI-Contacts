@@ -10,6 +10,7 @@ import SwiftUI
 struct ContactRow: View {
     var person: any Profile
     
+    var selectedGroup: String = "Analyst"
     var displayMbti: Bool = false
     
     var body: some View {
@@ -67,7 +68,7 @@ struct ContactRow: View {
         
         if person is Contact {
             Divider()
-                .background(Color.white.opacity(0.5))
+                .background(selectedGroup == "Diplomats" || selectedGroup == "Explorers" ? Color.white.opacity(0.9) : Color.white.opacity(0.5))
                 .padding(.leading, 76)
                 .padding(.trailing, 20)
         }

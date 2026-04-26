@@ -12,6 +12,11 @@ struct SearchContactsView: View {
     var initialSearchText: String = ""
     
     @Query private var contacts: [Contact]
+    @Query private var users: [User]
+    
+    private var currentUser: User? {
+        users.first
+    }
     
     @State private var searchText: String = ""
     @State private var isShowingAddContactSheet = false
@@ -37,7 +42,15 @@ struct SearchContactsView: View {
                 String($0.firstName.prefix(1)).uppercased()
             }
             
-            if searchResults.isEmpty {
+            let userMatchesSearch: Bool = {
+                guard let user = currentUser else { return false }
+                if searchText.isEmpty { return true }
+                let fullName = "\(user.firstName) \(user.lastName)"
+                return fullName.localizedCaseInsensitiveContains(searchText) ||
+                user.mbti.localizedCaseInsensitiveContains(searchText)
+            }()
+            
+            if searchResults.isEmpty && !userMatchesSearch {
                 Spacer()
                 Text(searchText.isEmpty ? "No contacts yet" : "No results found")
                     .foregroundColor(.white.opacity(0.5))
@@ -45,6 +58,13 @@ struct SearchContactsView: View {
             } else {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 10) {
+                        if let user = currentUser, userMatchesSearch {
+                            ContactRow(person: user, displayMbti: true)
+                            
+                            if !searchResults.isEmpty {
+                            }
+                        }
+                        
                         ForEach(groupedContacts.keys.sorted(), id: \.self) { letter in
                             Section(header: HStack {
                                 Text(letter)
@@ -59,7 +79,7 @@ struct SearchContactsView: View {
                                 
                                 ForEach(groupedContacts[letter] ?? [], id: \.phoneNumber) { contact in
                                     ContactRow(person: contact, displayMbti: true)
-                                }
+                          }
                             }
                         }
                     }

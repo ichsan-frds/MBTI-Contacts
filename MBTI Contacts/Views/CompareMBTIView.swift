@@ -26,13 +26,13 @@ struct CompareMBTIView : View {
                 Image(currentUser.mbti)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: .infinity)
+                    .frame(width: 220, height: 220)
                     .zIndex(1)
                 
                 Image(contact.mbti)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: .infinity)
+                    .frame(width: 220, height: 220)
                     .scaleEffect(x: -1, y: 1)
                     .zIndex(0)
             }

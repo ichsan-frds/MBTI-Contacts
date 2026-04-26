@@ -80,6 +80,9 @@ struct RegisterView : View {
                 Color(red: 0.16, green: 0.16, blue: 0.18)
                     .ignoresSafeArea()
             )
+            .onTapGesture {
+                hideKeyboard()
+            }
         }
     }
 }
