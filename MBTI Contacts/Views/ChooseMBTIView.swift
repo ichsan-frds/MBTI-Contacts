@@ -78,17 +78,10 @@ struct ChooseMBTIView: View {
                 }) {
                     Text("Change")
                         .font(.headline)
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.black)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(LinearGradient(
-                            colors: [
-                                MBTIData.colors[selectedMBTI] ?? Color.purple,
-                                MBTIData.darkColors[selectedMBTI] ?? Color.purple.opacity(0.5)
-                            ],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        ))
+                        .background(Color(red: 1.0, green: 0.87, blue: 0.7))
                         .cornerRadius(12)
                 }
                 .padding(.horizontal, 30)
@@ -103,17 +96,10 @@ struct ChooseMBTIView: View {
                 )) {
                     Text("Next")
                         .font(.headline)
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.black)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(LinearGradient(
-                            colors: [
-                                MBTIData.colors[selectedMBTI] ?? Color.purple,
-                                MBTIData.darkColors[selectedMBTI] ?? Color.purple.opacity(0.5)
-                            ],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        ))
+                        .background(Color(red: 1.0, green: 0.87, blue: 0.7))
                         .cornerRadius(12)
                 }
                 .padding(.horizontal, 30)
