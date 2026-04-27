@@ -13,6 +13,7 @@ struct ContactDetailView: View {
     
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) var openURL
     
     var body: some View {
         ScrollView {
@@ -55,19 +56,40 @@ struct ContactDetailView: View {
                     
                     if let contact = person as? Contact {
                         HStack(spacing: 20) {
-                            ZStack {
-                                Circle().frame(width: 70, height: 70).foregroundColor(Color.primary.opacity(0.1))
-                                Image(systemName: "message").font(.system(size: 28)).foregroundColor(.primary)
+                            Button(action: {
+                                if let url = URL(string: "sms:\(contact.phoneNumber)") {
+                                    openURL(url)
+                                }
+                            }) {
+                                ZStack {
+                                    Circle().frame(width: 70, height: 70).foregroundColor(Color.primary.opacity(0.1))
+                                    Image(systemName: "message").font(.system(size: 28)).foregroundColor(.primary)
+                                }
                             }
-                            ZStack {
-                                Circle().frame(width: 70, height: 70).foregroundColor(Color.primary.opacity(0.1))
-                                Image(systemName: "phone").font(.system(size: 28)).foregroundColor(.primary)
+                            
+                            Button(action: {
+                                if let url = URL(string: "tel:\(contact.phoneNumber)") {
+                                    openURL(url)
+                                }
+                            }) {
+                                ZStack {
+                                    Circle().frame(width: 70, height: 70).foregroundColor(Color.primary.opacity(0.1))
+                                    Image(systemName: "phone").font(.system(size: 28)).foregroundColor(.primary)
+                                }
                             }
-                            ZStack {
-                                Circle().frame(width: 70, height: 70).foregroundColor(Color.primary.opacity(0.1))
-                                Image(systemName: "video").font(.system(size: 28)).foregroundColor(.primary)
+                            
+                            Button(action: {
+                                if let url = URL(string: "facetime://\(contact.phoneNumber)") {
+                                    openURL(url)
+                                }
+                            }) {
+                                ZStack {
+                                    Circle().frame(width: 70, height: 70).foregroundColor(Color.primary.opacity(0.1))
+                                    Image(systemName: "video").font(.system(size: 28)).foregroundColor(.primary)
+                                }
                             }
                         }
+                        .buttonStyle(PlainButtonStyle())
                         
                         NavigationLink(destination: CompareMBTIView(contact: contact)) {
                             ZStack {
