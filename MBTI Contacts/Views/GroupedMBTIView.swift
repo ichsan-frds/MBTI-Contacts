@@ -21,6 +21,8 @@ struct GroupedMBTIView: View {
     @State private var hasLoaded: Bool = false
     @State private var isShowingAddContactSheet = false
     
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
         VStack(spacing: 16) {
             HStack(spacing: 8) {
@@ -33,15 +35,16 @@ struct GroupedMBTIView: View {
                     }) {
                         Text(group)
                             .font(.system(size: 13, weight: .semibold))
-                            .foregroundColor(.white)
+                            .foregroundColor(selectedGroup == group ? .white : .primary)
                             .padding(.horizontal, 12)
                             .padding(.vertical, 7)
                             .background(
                                 selectedGroup == group
-                                ? Color.white.opacity(0.6)
-                                : Color.white.opacity(0.08)
+                                ? (MBTIData.groupColors[group] ?? .blue)
+                                : Color.primary.opacity(0.08)
                             )
                             .cornerRadius(50)
+                            .animation(.spring(duration: 0.3), value: selectedGroup)
                     }
                 }
             }
@@ -55,14 +58,18 @@ struct GroupedMBTIView: View {
                         ZStack {
                             RoundedRectangle(cornerRadius: 25)
                                 .fill(
-                                    LinearGradient(
-                                        colors: [
-                                            MBTIData.colors[mbti] ?? Color.purple,
-                                            MBTIData.darkColors[mbti] ?? Color.purple.opacity(0.5)
-                                        ],
-                                        startPoint: .top,
-                                        endPoint: .bottom
+                                    colorScheme == .dark
+                                    ? AnyShapeStyle(
+                                        LinearGradient(
+                                            colors: [
+                                                MBTIData.colors[mbti] ?? Color.purple,
+                                                MBTIData.darkColors[mbti] ?? Color.purple.opacity(0.5)
+                                            ],
+                                            startPoint: .top,
+                                            endPoint: .bottom
+                                        )
                                     )
+                                    : AnyShapeStyle(MBTIData.groupColors[selectedGroup] ?? .primary.opacity(0.1))
                                 )
                                 .frame(maxWidth: .infinity)
                                 .frame(height: 540)
@@ -82,7 +89,7 @@ struct GroupedMBTIView: View {
                                     .padding(.bottom, 8)
                                 
                                 if let user = currentUser, mbti == user.mbti {
-                                    ContactRow(person: user)
+                                    ContactRow(person: user, useWhiteText: true)
                                     
                                     if !filteredContacts.isEmpty {
                                         Divider()
@@ -95,7 +102,7 @@ struct GroupedMBTIView: View {
                                     Spacer()
                                     if currentUser?.mbti != mbti {
                                         Text("No \(mbti) contacts yet")
-                                            .foregroundColor(.white.opacity(0.5))
+                                            .foregroundColor(.white.opacity(0.6))
                                             .frame(maxWidth: .infinity, alignment: .center)
                                     }
                                     Spacer()
@@ -106,7 +113,7 @@ struct GroupedMBTIView: View {
                                                 HStack {
                                                     Text(letter)
                                                         .font(.footnote.bold())
-                                                        .foregroundColor(.white.opacity(0.5))
+                                                        .foregroundColor(.white.opacity(0.6))
                                                         .padding(.leading, 16)
                                                     Spacer()
                                                 }
@@ -114,12 +121,12 @@ struct GroupedMBTIView: View {
                                                 .padding(.bottom, 4)
                                                 
                                                 Divider()
-                                                    .background(selectedGroup == "Diplomats" || selectedGroup == "Explorers" ? Color.white.opacity(0.9) : Color.white.opacity(0.5))
+                                                    .background(Color.white.opacity(0.15))
                                                     .padding(.leading, 15)
                                                     .padding(.trailing, 20)
                                                 
                                                 ForEach(groupedContacts[letter] ?? [], id: \.phoneNumber) { contact in
-                                                    ContactRow(person: contact, selectedGroup: selectedGroup)
+                                                    ContactRow(person: contact, useWhiteText: true)
                                                 }
                                             }
                                         }
@@ -147,14 +154,14 @@ struct GroupedMBTIView: View {
                 NavigationLink(destination: SearchContactsView()) {
                     HStack {
                         Image(systemName: "magnifyingglass")
-                            .foregroundColor(.white.opacity(0.6))
+                            .foregroundColor(.primary.opacity(0.6))
                         Text("Search")
-                            .foregroundColor(.white.opacity(0.6))
+                            .foregroundColor(.primary.opacity(0.6))
                         Spacer()
                     }
                     .padding(.horizontal, 16)
                     .padding(.vertical, 14)
-                    .background(Color.white.opacity(0.1))
+                    .background(Color.primary.opacity(0.1))
                     .cornerRadius(30)
                 }
                 
@@ -163,9 +170,9 @@ struct GroupedMBTIView: View {
                 }) {
                     Image(systemName: "plus")
                         .font(.title3.bold())
-                        .foregroundColor(.white)
+                        .foregroundColor(.primary)
                         .padding(14)
-                        .background(Color.white.opacity(0.15))
+                        .background(Color.primary.opacity(0.15))
                         .cornerRadius(999)
                 }
                 .sheet(isPresented: $isShowingAddContactSheet) {
@@ -178,10 +185,9 @@ struct GroupedMBTIView: View {
         }
         .navigationTitle("MBTI Contacts")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarColorScheme(.dark, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
-            Color(red: 0.16, green: 0.16, blue: 0.18)
+            Color("AppBackground")
                 .ignoresSafeArea()
         )
         .navigationBarBackButtonHidden(true)
@@ -215,14 +221,14 @@ struct GroupedMBTIView: View {
 
 #Preview {
     let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try! ModelContainer(for: Contact.self, User.self, configurations: config)
-        
-        for contact in ContactSeeder.defaultContacts {
-            container.mainContext.insert(contact)
-        }
-        
-        return NavigationStack {
-            GroupedMBTIView()
-        }
-        .modelContainer(container)
+    let container = try! ModelContainer(for: Contact.self, User.self, configurations: config)
+    
+    for contact in ContactSeeder.defaultContacts {
+        container.mainContext.insert(contact)
+    }
+    
+    return NavigationStack {
+        GroupedMBTIView()
+    }
+    .modelContainer(container)
 }

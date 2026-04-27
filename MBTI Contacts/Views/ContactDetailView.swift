@@ -21,10 +21,10 @@ struct ContactDetailView: View {
                     ZStack {
                         Circle()
                             .frame(width: 200, height: 200)
-                            .foregroundColor(Color.white.opacity(0.15))
+                            .foregroundColor(Color.primary.opacity(0.1))
                         Text("\(person.firstName.prefix(1).uppercased())\(person.lastName.prefix(1).uppercased())")
                             .font(.system(size: 80, weight: .bold))
-                            .foregroundColor(.white)
+                            .foregroundColor(.primary)
                     }
                     
                     VStack(spacing: 12) {
@@ -45,27 +45,27 @@ struct ContactDetailView: View {
                     VStack(spacing: 10) {
                         Text("\(person.firstName) \(person.lastName)")
                             .font(.title.bold())
-                            .foregroundColor(.white)
+                            .foregroundColor(.primary)
                         
                         Text("\(person.mbti)")
                             .font(.title2.bold())
-                            .foregroundColor(MBTIData.colors[person.mbti] ?? .secondary)
+                            .foregroundColor(MBTIData.colors[person.mbti] ?? .primary)
                     }
                     .padding(.bottom, 15)
                     
                     if let contact = person as? Contact {
                         HStack(spacing: 20) {
                             ZStack {
-                                Circle().frame(width: 70, height: 70).foregroundColor(Color.white.opacity(0.1))
-                                Image(systemName: "message").font(.system(size: 28)).foregroundColor(.white)
+                                Circle().frame(width: 70, height: 70).foregroundColor(Color.primary.opacity(0.1))
+                                Image(systemName: "message").font(.system(size: 28)).foregroundColor(.primary)
                             }
                             ZStack {
-                                Circle().frame(width: 70, height: 70).foregroundColor(Color.white.opacity(0.1))
-                                Image(systemName: "phone").font(.system(size: 28)).foregroundColor(.white)
+                                Circle().frame(width: 70, height: 70).foregroundColor(Color.primary.opacity(0.1))
+                                Image(systemName: "phone").font(.system(size: 28)).foregroundColor(.primary)
                             }
                             ZStack {
-                                Circle().frame(width: 70, height: 70).foregroundColor(Color.white.opacity(0.1))
-                                Image(systemName: "video").font(.system(size: 28)).foregroundColor(.white)
+                                Circle().frame(width: 70, height: 70).foregroundColor(Color.primary.opacity(0.1))
+                                Image(systemName: "video").font(.system(size: 28)).foregroundColor(.primary)
                             }
                         }
                         
@@ -85,41 +85,41 @@ struct ContactDetailView: View {
                     
                     if person is User {
                         VStack(alignment: .leading, spacing: 6) {
-                            Text("First Name").bold().foregroundColor(.white)
-                            Text(person.firstName).foregroundColor(.white.opacity(0.6))
+                            Text("First Name").bold().foregroundColor(.primary)
+                            Text(person.firstName).foregroundColor(.secondary)
                             
-                            Divider().background(Color.white.opacity(0.2))
+                            Divider().background(Color.primary.opacity(0.15))
                             
-                            Text("Last Name").bold().foregroundColor(.white)
-                            Text(person.lastName).foregroundColor(.white.opacity(0.6))
+                            Text("Last Name").bold().foregroundColor(.primary)
+                            Text(person.lastName).foregroundColor(.secondary)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 20)
                         .padding(.vertical, 15)
-                        .background(RoundedRectangle(cornerRadius: 25).foregroundStyle(Color.white.opacity(0.1)))
+                        .background(RoundedRectangle(cornerRadius: 25).foregroundStyle(Color.primary.opacity(0.05)))
                     }
                     
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("Phone").bold().foregroundColor(.white)
-                        Text(person.phoneNumber).foregroundColor(.white.opacity(0.6))
+                        Text("Phone").bold().foregroundColor(.primary)
+                        Text(person.phoneNumber).foregroundColor(.secondary)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 20)
                     .padding(.vertical, 15)
                     .frame(minHeight: 65)
-                    .background(RoundedRectangle(cornerRadius: 25).foregroundStyle(Color.white.opacity(0.1)))
+                    .background(RoundedRectangle(cornerRadius: 25).foregroundStyle(Color.primary.opacity(0.05)))
                     
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("Personality Description").bold().foregroundColor(.white)
+                        Text("Personality Description").bold().foregroundColor(.primary)
                         Text(person.desc)
-                            .foregroundColor(.white.opacity(0.6))
+                            .foregroundColor(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 20)
                     .padding(.vertical, 15)
                     .frame(minHeight: 65)
-                    .background(RoundedRectangle(cornerRadius: 25).foregroundStyle(Color.white.opacity(0.1)))
+                    .background(RoundedRectangle(cornerRadius: 25).foregroundStyle(Color.primary.opacity(0.05)))
                     
                     if person is Contact {
                         Button(action: {
@@ -145,18 +145,17 @@ struct ContactDetailView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
-            Color(red: 0.16, green: 0.16, blue: 0.18)
+            Color("AppBackground")
                 .ignoresSafeArea()
         )
         .navigationTitle("Contact Detail")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarColorScheme(.dark, for: .navigationBar)
         .toolbar {
             if let user = person as? User {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     NavigationLink(destination: EditProfileView(user: user)) {
                         Image(systemName: "pencil")
-                            .foregroundColor(.white)
+                            .foregroundColor(.primary)
                     }
                     .buttonStyle(PlainButtonStyle())
                 }
@@ -169,7 +168,6 @@ struct ContactDetailView: View {
     NavigationStack {
         ContactDetailView(
             person: Contact(firstName: "Andres", lastName: "Iniesta", phoneNumber: "+6212345678990", mbti: "INTJ", desc: "Calm and has a great vision in life Calm and has a great vision in life Calm and has a great vision")
-            
         )
     }
 }
@@ -178,7 +176,6 @@ struct ContactDetailView: View {
     NavigationStack {
         ContactDetailView(
             person: User(firstName: "Ichsan", lastName: "Firdaus", phoneNumber: "+6212345678990", mbti: "INTJ", desc: "Calm and has a great vision in life Calm and has a great vision in life Calm and has a great vision")
-            
         )
     }
 }

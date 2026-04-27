@@ -25,24 +25,33 @@ struct AddContact: View {
             VStack(spacing: 20) {
                 
                 VStack(alignment: .leading, spacing: 10) {
-                    TextField("", text: $firstName, prompt: Text("First Name").foregroundColor(.white.opacity(0.5)))
-                        .foregroundColor(.white)
-                        .tint(.white)
-                    Divider().background(Color.white.opacity(0.3))
+                    TextField("", text: $firstName, prompt: Text("First Name").foregroundColor(.secondary))
+                        .foregroundColor(.primary)
+                        .tint(.primary)
+                        .textInputAutocapitalization(.words)
                     
-                    TextField("", text: $lastName, prompt: Text("Last Name").foregroundColor(.white.opacity(0.5)))
-                        .foregroundColor(.white)
-                        .tint(.white)
-                    Divider().background(Color.white.opacity(0.3))
+                    Divider()
+                        .background(Color.primary.opacity(0.15))
                     
-                    TextField("", text: $phoneNumber, prompt: Text("Phone Number").foregroundColor(.white.opacity(0.5)))
-                        .foregroundColor(.white)
-                        .tint(.white)
+                    TextField("", text: $lastName, prompt: Text("Last Name").foregroundColor(.secondary))
+                        .foregroundColor(.primary)
+                        .tint(.primary)
+                        .textInputAutocapitalization(.words)
+                    
+                    Divider()
+                        .background(Color.primary.opacity(0.15))
+                    
+                    TextField("", text: $phoneNumber, prompt: Text("Phone Number").foregroundColor(.secondary))
+                        .foregroundColor(.primary)
+                        .tint(.primary)
                         .keyboardType(.phonePad)
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 15)
-                .background(RoundedRectangle(cornerRadius: 25).foregroundStyle(Color.white.opacity(0.1)))
+                .background(
+                    RoundedRectangle(cornerRadius: 25)
+                        .fill(Color.primary.opacity(0.05))
+                )
                 .padding(.horizontal, 30)
                 .padding(.top, 30)
                 
@@ -50,13 +59,9 @@ struct AddContact: View {
                 
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(
-                Color(red: 0.16, green: 0.16, blue: 0.18)
-                    .ignoresSafeArea()
-            )
+            .background(Color("AppBackground").ignoresSafeArea())
             .navigationTitle("New Contact")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
@@ -64,7 +69,7 @@ struct AddContact: View {
                     }) {
                         Image(systemName: "xmark")
                             .font(.title3)
-                            .foregroundColor(.white)
+                            .foregroundColor(.primary)
                     }
                 }
                 
@@ -85,12 +90,15 @@ struct AddContact: View {
                     }) {
                         Image(systemName: "checkmark")
                             .font(.body.bold())
-                            .foregroundColor(isFormValid ? .black : .white.opacity(0.5))
+                            .foregroundColor(isFormValid ? .black : .secondary)
                     }
                     .buttonStyle(.borderedProminent)
-                    .tint(isFormValid ? Color(red: 1.0, green: 0.87, blue: 0.7) : Color.white.opacity(0.15))
+                    .tint(isFormValid ? Color(red: 1.0, green: 0.87, blue: 0.7) : Color(UIColor.systemFill))
                     .disabled(!isFormValid)
                 }
+            }
+            .onTapGesture {
+                hideKeyboard()
             }
         }
     }

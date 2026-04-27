@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct ComparisonRow: View {
     let icon: String
     let title: String
@@ -20,21 +18,22 @@ struct ComparisonRow: View {
             VStack {
                 Image(systemName: icon)
                     .font(.largeTitle.bold())
+                    .foregroundStyle(.primary)
                 
                 Text(title)
                     .font(.caption)
+                    .foregroundStyle(.primary)
             }
             .frame(width: 60)
             
             ScrollView(showsIndicators: true) {
                 Text(ComparisonEngine.getDescription(for: archetype, in: category))
                     .font(.caption)
-                    .foregroundColor(.white.opacity(0.6))
+                    .foregroundColor(.secondary)
                     .multilineTextAlignment(.leading)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .frame(maxHeight: .infinity)
         }
-        .foregroundStyle(.white)
     }
 }

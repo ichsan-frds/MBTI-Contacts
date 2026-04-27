@@ -26,7 +26,7 @@ struct UserDescriptionView: View {
             
             Text("Describe Yourself in One Sentence")
                 .font(.title.bold())
-                .foregroundColor(.white)
+                .foregroundColor(.primary)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 30)
             
@@ -40,17 +40,17 @@ struct UserDescriptionView: View {
                 }
                 .frame(height: 170)
                 .scrollContentBackground(.hidden)
-                .background(Color(red: 0.13, green: 0.13, blue: 0.15))
-                .foregroundColor(.white)
+                .background(Color(UIColor.systemGray5))
+                .foregroundColor(.primary)
                 .overlay(
                     RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.white.opacity(0.4), lineWidth: 1)
+                        .stroke(Color.primary.opacity(0.4), lineWidth: 1)
                 )
                 .padding(.horizontal, 30)
             
             Text("\(textInput.count)/\(maxTextLength)")
                 .bold()
-                .foregroundColor(.white)
+                .foregroundColor(.primary)
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 .padding(.horizontal, 30)
                 .padding(.top, 6)
@@ -65,7 +65,7 @@ struct UserDescriptionView: View {
                 
                 Text(mbti)
                     .font(.title2.bold())
-                    .foregroundColor(.white)
+                    .foregroundColor(.primary)
             }
             
             Spacer()
@@ -76,7 +76,7 @@ struct UserDescriptionView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(textInput.isEmpty ? Color.gray : Color.black)
+                    .background(textInput.isEmpty ? Color.secondary : Color.black)
                     .cornerRadius(12)
             }
             .disabled(textInput.isEmpty)
@@ -86,7 +86,7 @@ struct UserDescriptionView: View {
         .navigationBarBackButtonHidden(false)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
-            Color(red: 0.16, green: 0.16, blue: 0.18)
+            Color("AppBackground")
                 .ignoresSafeArea()
         )
         .onTapGesture {

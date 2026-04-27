@@ -13,37 +13,39 @@ struct ContactRow: View {
     var selectedGroup: String = "Analyst"
     var displayMbti: Bool = false
     
+    var useWhiteText: Bool = false
+    
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
         NavigationLink(destination: ContactDetailView(person: person)) {
             HStack(spacing: 14) {
                 
                 ZStack {
                     Circle()
-                        .fill(Color.black.opacity(0.25))
+                        .fill(Color.primary.opacity(0.1))
                         .frame(width: 46, height: 46)
                     Text("\(person.firstName.prefix(1).uppercased())\(person.lastName.prefix(1).uppercased())")
                         .font(.system(size: 16, weight: .bold))
-                        .foregroundColor(.white)
+                        .foregroundColor(useWhiteText ? .white : .primary)
                 }
-
+                
                 if person is User {
-                    
                     VStack(alignment: .leading, spacing: 2) {
                         Text("\(person.firstName) \(person.lastName)")
                             .font(.headline)
-                            .foregroundColor(.white)
+                            .foregroundColor(useWhiteText ? .white : .primary)
                         
                         Text("My Profile")
                             .font(.caption)
-                            .foregroundColor(.white.opacity(0.55))
+                            .foregroundColor(useWhiteText ? .white.opacity(0.6) : .secondary)
                     }
                     Spacer()
                     
                 } else {
-                    
                     Text("\(person.firstName) \(person.lastName)")
                         .font(.headline)
-                        .foregroundColor(.white)
+                        .foregroundColor(useWhiteText ? .white : .primary)
                     
                     if displayMbti {
                         Spacer()
@@ -52,7 +54,9 @@ struct ContactRow: View {
                             .foregroundStyle(LinearGradient(
                                 colors: [
                                     MBTIData.colors[person.mbti] ?? Color.purple,
-                                    MBTIData.darkColors[person.mbti] ?? Color.purple.opacity(0.5)
+                                    colorScheme == .dark
+                                    ? (MBTIData.darkColors[person.mbti] ?? Color.purple.opacity(0.5))
+                                    : (MBTIData.colors[person.mbti]?.opacity(0.6) ?? Color.purple.opacity(0.6))
                                 ],
                                 startPoint: .top,
                                 endPoint: .bottom
@@ -68,7 +72,7 @@ struct ContactRow: View {
         
         if person is Contact {
             Divider()
-                .background(selectedGroup == "Diplomats" || selectedGroup == "Explorers" ? Color.white.opacity(0.9) : Color.white.opacity(0.5))
+                .background(Color.primary.opacity(0.15))
                 .padding(.leading, 76)
                 .padding(.trailing, 20)
         }

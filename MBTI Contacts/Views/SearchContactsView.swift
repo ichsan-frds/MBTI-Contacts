@@ -53,7 +53,8 @@ struct SearchContactsView: View {
             if searchResults.isEmpty && !userMatchesSearch {
                 Spacer()
                 Text(searchText.isEmpty ? "No contacts yet" : "No results found")
-                    .foregroundColor(.white.opacity(0.5))
+                    // 1. Replaced white.opacity with native secondary
+                    .foregroundColor(.secondary)
                 Spacer()
             } else {
                 ScrollView {
@@ -62,6 +63,10 @@ struct SearchContactsView: View {
                             ContactRow(person: user, displayMbti: true)
                             
                             if !searchResults.isEmpty {
+                                Divider()
+                                    .background(Color.primary.opacity(0.15))
+                                    .padding(.leading, 76)
+                                    .padding(.trailing, 20)
                             }
                         }
                         
@@ -69,17 +74,17 @@ struct SearchContactsView: View {
                             Section(header: HStack {
                                 Text(letter)
                                     .font(.footnote.bold())
-                                    .foregroundColor(.white.opacity(0.5))
+                                    .foregroundColor(.secondary)
                                     .padding(.leading, 20)
                                 Spacer()
                             }) {
                                 Divider()
-                                    .background(Color.white.opacity(0.2))
+                                    .background(Color.primary.opacity(0.15))
                                     .padding(.horizontal, 20)
                                 
                                 ForEach(groupedContacts[letter] ?? [], id: \.phoneNumber) { contact in
                                     ContactRow(person: contact, displayMbti: true)
-                          }
+                                }
                             }
                         }
                     }
@@ -91,22 +96,23 @@ struct SearchContactsView: View {
             HStack(spacing: 12) {
                 HStack {
                     Image(systemName: "magnifyingglass")
-                        .foregroundColor(.white.opacity(0.6))
+                        .foregroundColor(.secondary)
+                    
                     TextField("Search", text: $searchText)
-                        .foregroundColor(.white)
-                        .tint(.white)
+                        .foregroundColor(.primary)
+                        .tint(.primary)
                         .autocorrectionDisabled()
                         .focused($isSearchFocused)
                     
                     if !searchText.isEmpty {
                         Button(action: { searchText = "" }) {
                             Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(.white.opacity(0.6))
+                                .foregroundColor(.secondary)
                         }
                     }
                 }
                 .padding(12)
-                .background(Color.white.opacity(0.1))
+                .background(Color.primary.opacity(0.1))
                 .cornerRadius(30)
                 
                 Button(action: {
@@ -121,9 +127,9 @@ struct SearchContactsView: View {
                     Image(systemName: isSearchFocused ? "xmark" : "plus")
                         .font(.title3.bold())
                         .frame(width: 20, height: 20)
-                        .foregroundColor(.white)
+                        .foregroundColor(.primary)
                         .padding(14)
-                        .background(Color.white.opacity(0.15))
+                        .background(Color.primary.opacity(0.15))
                         .cornerRadius(999)
                         .contentTransition(.symbolEffect(.replace))
                 }
@@ -137,12 +143,11 @@ struct SearchContactsView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
-            Color(red: 0.16, green: 0.16, blue: 0.18)
+            Color("AppBackground")
                 .ignoresSafeArea()
         )
         .navigationTitle("All Contacts")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarColorScheme(.dark, for: .navigationBar)
         .onAppear {
             searchText = initialSearchText
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {

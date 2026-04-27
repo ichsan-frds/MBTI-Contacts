@@ -23,7 +23,7 @@ struct RegisterView : View {
                             Image(mbti)
                             Text(mbti)
                                 .font(.system(size: 24, weight: .bold))
-                                .foregroundStyle(MBTIData.groupColors[mbti] ?? .white)
+                                .foregroundStyle(MBTIData.groupColors[mbti] ?? .primary)
                         }
                     }
                 }
@@ -34,26 +34,26 @@ struct RegisterView : View {
                 Spacer()
                 
                 VStack() {
-                    TextField("", text: $firstName, prompt: Text("First Name").foregroundColor(.white.opacity(0.6)))
-                        .padding(.vertical, 10).foregroundColor(.white)
+                    TextField("", text: $firstName, prompt: Text("First Name").foregroundColor(.secondary))
+                        .padding(.vertical, 10).foregroundColor(.primary)
                     
                     Divider()
-                        .background(Color.gray.opacity(0.6))
+                        .background(Color.secondary.opacity(0.5))
                     
-                    TextField("", text: $lastName, prompt: Text("Last Name").foregroundColor(.white.opacity(0.6)))
-                        .padding(.vertical, 10).foregroundColor(.white)
+                    TextField("", text: $lastName, prompt: Text("Last Name").foregroundColor(.secondary))
+                        .padding(.vertical, 10).foregroundColor(.primary)
                     
                     Divider()
-                        .background(Color.gray.opacity(0.6))
+                        .background(Color.secondary.opacity(0.5))
                     
-                    TextField("", text: $phoneNumber, prompt: Text("Phone Number").foregroundColor(.white.opacity(0.6)))
-                        .padding(.vertical, 10).foregroundColor(.white)
+                    TextField("", text: $phoneNumber, prompt: Text("Phone Number").foregroundColor(.secondary))
+                        .padding(.vertical, 10).foregroundColor(.primary)
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 10)
                 .background(
                     RoundedRectangle(cornerRadius: 25)
-                        .fill(Color.black)
+                        .fill(Color("FormBackground"))
                 )
                 .padding(.horizontal, 30)
                 
@@ -62,10 +62,10 @@ struct RegisterView : View {
                 NavigationLink(destination: ChooseMBTIView(firstName: firstName, lastName: lastName, phoneNumber: phoneNumber)) {
                     Text("Next")
                         .font(.headline)
-                        .foregroundStyle(firstName.isEmpty || lastName.isEmpty || phoneNumber.isEmpty ? Color.white : Color.black)
+                        .foregroundStyle(firstName.isEmpty || lastName.isEmpty || phoneNumber.isEmpty ? Color.secondary : Color.black)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(firstName.isEmpty || lastName.isEmpty || phoneNumber.isEmpty ? Color.gray : Color(red: 1.0, green: 0.87, blue: 0.7))
+                        .background(firstName.isEmpty || lastName.isEmpty || phoneNumber.isEmpty ? Color(UIColor.systemGray2) : Color(red: 1.0, green: 0.87, blue: 0.7))
                         .cornerRadius(12)
                 }
                 .disabled(firstName.isEmpty || lastName.isEmpty || phoneNumber.isEmpty)
@@ -74,12 +74,8 @@ struct RegisterView : View {
             }
             .navigationTitle("Register")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbarColorScheme(.dark, for: .navigationBar)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(
-                Color(red: 0.16, green: 0.16, blue: 0.18)
-                    .ignoresSafeArea()
-            )
+            .background(Color("AppBackground").ignoresSafeArea())
             .onTapGesture {
                 hideKeyboard()
             }

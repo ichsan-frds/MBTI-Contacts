@@ -21,10 +21,10 @@ struct EditProfileView: View {
                     ZStack {
                         Circle()
                             .frame(width: 160, height: 160)
-                            .foregroundColor(Color.white.opacity(0.15))
+                            .foregroundColor(Color.primary.opacity(0.1))
                         Text("\(user.firstName.prefix(1).uppercased())\(user.lastName.prefix(1).uppercased())")
                             .font(.system(size: 60, weight: .bold))
-                            .foregroundColor(.white)
+                            .foregroundColor(.primary)
                     }
                     
                     Image(user.mbti)
@@ -40,7 +40,7 @@ struct EditProfileView: View {
                 VStack(spacing: 4) {
                     Text(user.firstName)
                         .font(.title2.bold())
-                        .foregroundColor(.white)
+                        .foregroundColor(.primary)
                     Text(user.mbti)
                         .font(.headline)
                         .foregroundColor(MBTIData.colors[user.mbti] ?? .secondary)
@@ -55,10 +55,10 @@ struct EditProfileView: View {
                     //                }) {
                     //                    Text("Edit Photo")
                     //                        .font(.subheadline.bold())
-                    //                        .foregroundColor(.white)
+                    //                        .foregroundColor(.primary) // Adaptive
                     //                        .padding(.horizontal, 20)
                     //                        .padding(.vertical, 10)
-                    //                        .background(Color.white.opacity(0.2))
+                    //                        .background(Color.primary.opacity(0.1)) // Adaptive
                     //                        .cornerRadius(999)
                     //                }
                     
@@ -79,55 +79,59 @@ struct EditProfileView: View {
                     
                     VStack(alignment: .leading, spacing: 10) {
                         TextField("First name", text: $user.firstName)
-                            .foregroundColor(.white)
-                            .tint(.white)
-                        Divider().background(Color.white.opacity(0.3))
+                            .foregroundColor(.primary)
+                            .tint(.primary)
+                        
+                        Divider().background(Color.primary.opacity(0.15))
+                        
                         TextField("Last name", text: $user.lastName)
-                            .foregroundColor(.white)
-                            .tint(.white)
-                        Divider().background(Color.white.opacity(0.3))
+                            .foregroundColor(.primary)
+                            .tint(.primary)
+                        
+                        Divider().background(Color.primary.opacity(0.15))
+                        
                         TextField("Phone", text: $user.phoneNumber)
-                            .foregroundColor(.white)
-                            .tint(.white)
+                            .foregroundColor(.primary)
+                            .tint(.primary)
                             .keyboardType(.phonePad)
                     }
                     .padding(.horizontal, 20)
                     .padding(.vertical, 15)
-                    .background(RoundedRectangle(cornerRadius: 25).foregroundStyle(Color.white.opacity(0.1)))
+                    .background(RoundedRectangle(cornerRadius: 25).foregroundStyle(Color.primary.opacity(0.05)))
                     
                     VStack(alignment: .leading, spacing: 6) {
                         Text("Personality Description")
                             .font(.subheadline.bold())
-                            .foregroundColor(.white)
+                            .foregroundColor(.primary)
+                        
                         TextField("Type how you as a person here", text: $user.desc, axis: .vertical)
-                            .foregroundColor(.white.opacity(0.6))
-                            .tint(.white)
+                            .foregroundColor(.secondary)
+                            .tint(.primary)
                             .lineLimit(3...6)
                     }
                     .padding(.horizontal, 20)
                     .padding(.vertical, 15)
-                    .background(RoundedRectangle(cornerRadius: 25).foregroundStyle(Color.white.opacity(0.1)))
+                    .background(RoundedRectangle(cornerRadius: 25).foregroundStyle(Color.primary.opacity(0.05)))
                 }
                 .padding(.horizontal, 30)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
-            Color(red: 0.16, green: 0.16, blue: 0.18)
+            Color("AppBackground")
                 .ignoresSafeArea()
         )
         .navigationTitle("Edit Profile")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarColorScheme(.dark, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
                     try? modelContext.save()
                     dismiss()
                 }) {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(.white)
-                        .font(.title3)
+                    Image(systemName: "checkmark")
+                        .font(.body.bold())
+                        .foregroundColor(.blue)
                 }
             }
         }

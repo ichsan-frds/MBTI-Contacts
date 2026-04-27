@@ -18,6 +18,7 @@ struct ChooseMBTIView: View {
     @State private var selectedMBTI: String = "INTJ"
     
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         VStack {
@@ -38,7 +39,9 @@ struct ChooseMBTIView: View {
                                 .fill(LinearGradient(
                                     colors: [
                                         MBTIData.colors[mbti] ?? Color.purple,
-                                        MBTIData.darkColors[mbti] ?? Color.purple.opacity(0.5)
+                                        colorScheme == .dark
+                                        ? (MBTIData.darkColors[mbti] ?? Color.purple.opacity(0.5))
+                                        : (MBTIData.colors[mbti]?.opacity(0.2) ?? Color.purple.opacity(0.2))
                                     ],
                                     startPoint: .top,
                                     endPoint: .bottom
@@ -53,11 +56,11 @@ struct ChooseMBTIView: View {
                         
                         Text(mbti)
                             .font(.largeTitle.bold())
-                            .foregroundColor(.white)
+                            .foregroundColor(.primary)
                         
                         Text(MBTIData.descriptions[mbti] ?? "")
                             .font(.body)
-                            .foregroundColor(.white.opacity(0.85))
+                            .foregroundColor(.primary.opacity(0.85))
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 30)
                     }
@@ -108,10 +111,9 @@ struct ChooseMBTIView: View {
         }
         .navigationTitle("Choose Your MBTI")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarColorScheme(.dark, for: .navigationBar)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(
-            Color(red: 0.16, green: 0.16, blue: 0.18)
+            Color("AppBackground")
                 .ignoresSafeArea()
         )
         .onAppear {

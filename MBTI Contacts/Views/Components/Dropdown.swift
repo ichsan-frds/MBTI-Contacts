@@ -21,16 +21,17 @@ struct Dropdown: View {
             HStack {
                 Text(selection)
                     .font(.headline)
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.primary)
                 Spacer()
                 Image(systemName: "chevron.down")
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.primary)
             }
             .padding(.horizontal, 20)
             .padding(.vertical, 12)
             .frame(width: 250)
-            .background(Color.white.opacity(0.15))
+            .background(Color.secondary.opacity(0.2))
             .cornerRadius(60)
         }
+        .tint(.primary)
     }
 }
