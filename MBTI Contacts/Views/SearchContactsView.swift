@@ -53,7 +53,6 @@ struct SearchContactsView: View {
             if searchResults.isEmpty && !userMatchesSearch {
                 Spacer()
                 Text(searchText.isEmpty ? "No contacts yet" : "No results found")
-                    // 1. Replaced white.opacity with native secondary
                     .foregroundColor(.secondary)
                 Spacer()
             } else {

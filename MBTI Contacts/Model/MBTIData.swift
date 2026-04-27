@@ -117,7 +117,7 @@ struct MBTIData {
         
         if hasSeeded {
             print("Data already seeded previously. Skipping.")
-            return // Exit the function entirely
+            return
         }
         
         do {
