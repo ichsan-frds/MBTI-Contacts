@@ -7,6 +7,7 @@
 
 import Foundation
 
+// MARK: List of possible relationship between 2 mbti
 enum RelationshipArchetype: String {
     case soulmates = "The Power Duo"
     case mirrors = "The Reflection"
@@ -14,6 +15,7 @@ enum RelationshipArchetype: String {
     case clashing = "The Constant Friction"
 }
 
+// MARK: List of comparison category
 enum ComparisonCategory: String, CaseIterable {
     case cognitive = "Cognitive"
     case teamwork = "Teamwork"
@@ -22,7 +24,7 @@ enum ComparisonCategory: String, CaseIterable {
 }
 
 struct ComparisonEngine {
-    
+    // MARK: Hardcoded Description for all possible combination of possible relationship of each category
     static func getDescription(for archetype: RelationshipArchetype, in category: ComparisonCategory) -> String {
         switch (archetype, category) {
         
@@ -64,6 +66,7 @@ struct ComparisonEngine {
         }
     }
     
+    // MARK: Get the relationship between 2 mbti
     static func getArchetype(user1: String, user2: String) -> RelationshipArchetype {
         if user1 == user2 { return .mirrors }
         

@@ -16,6 +16,7 @@ struct CompareMBTIView : View {
         users.first ?? User(firstName: "User", lastName: "", phoneNumber: "", mbti: "INTJ", desc: "")
     }
     
+    // MARK: Get the relationship between 2 mbti
     private var archetype: RelationshipArchetype {
         ComparisonEngine.getArchetype(user1: currentUser.mbti, user2: contact.mbti)
     }

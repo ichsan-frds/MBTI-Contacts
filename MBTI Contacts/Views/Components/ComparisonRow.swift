@@ -27,6 +27,7 @@ struct ComparisonRow: View {
             .frame(width: 60)
             
             ScrollView(showsIndicators: true) {
+                // MARK: Use the relationship value to get the description of each category
                 Text(ComparisonEngine.getDescription(for: archetype, in: category))
                     .font(.caption)
                     .foregroundColor(.secondary)

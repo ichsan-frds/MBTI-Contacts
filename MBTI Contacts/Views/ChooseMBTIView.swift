@@ -12,12 +12,17 @@ struct ChooseMBTIView: View {
     var lastName: String = ""
     var phoneNumber: String = ""
     
+    // MARK: Binding = Passing by Reference
+    // ? / Optional = Data type can be other than Binding, because Binding always expect a parameter referenced from Parent
+    // Default Value "nil" = Optional Parameter (supported by the Optional Binding
     var editmbtiBinding: Binding<String>? = nil
     
     @State private var selectedCategory: String = "Analyst"
     @State private var selectedMBTI: String = "INTJ"
     
+    // MARK: Function to Back or Close from a .navigationLink or .sheet
     @Environment(\.dismiss) private var dismiss
+    // MARK: Variable that tells whether the iPhone is in Light or Dark Mode
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
@@ -36,6 +41,7 @@ struct ChooseMBTIView: View {
                     VStack(spacing: 16) {
                         ZStack {
                             Circle()
+                            // MARK: Linear Gradient Color
                                 .fill(LinearGradient(
                                     colors: [
                                         MBTIData.colors[mbti] ?? Color.purple,
@@ -91,6 +97,7 @@ struct ChooseMBTIView: View {
                 .padding(.bottom, 20)
                 
             } else {
+                // MARK: Props Drilling
                 NavigationLink(destination: UserDescriptionView(
                     firstName: firstName,
                     lastName: lastName,
@@ -116,7 +123,9 @@ struct ChooseMBTIView: View {
             Color("AppBackground")
                 .ignoresSafeArea()
         )
+        // MARK: Code Block run the first time View loaded and a page is closed and went back to this page
         .onAppear {
+            // MARK: Unwrap Optional Var and set fill the Selected MBTI & Category to that value
             if let currentMBTI = editmbtiBinding?.wrappedValue {
                 selectedMBTI = currentMBTI
             }
@@ -125,6 +134,7 @@ struct ChooseMBTIView: View {
     }
 }
 
+// MARK: 2 Preview in 1 View
 #Preview("Registration Mode") {
     NavigationStack {
         ChooseMBTIView(firstName: "Ichsan", lastName: "Firdaus", phoneNumber: "+6285959808110")

@@ -13,6 +13,7 @@ struct ContactDetailView: View {
     
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    // MARK: Allow the app to connect to another app or access things on the internet
     @Environment(\.openURL) var openURL
     
     var body: some View {
@@ -68,8 +69,10 @@ struct ContactDetailView: View {
                             }
                             
                             Button(action: {
-                                if let url = URL(string: "tel:\(contact.phoneNumber)") {
-                                    openURL(url)
+                                let sanitizedNumber = contact.phoneNumber.filter { "0123456789+".contains($0) }
+                                
+                                if let url = URL(string: "telprompt:\(sanitizedNumber)") {
+                                    UIApplication.shared.open(url)
                                 }
                             }) {
                                 ZStack {

@@ -10,6 +10,7 @@ import SwiftData
 
 struct EditProfileView: View {
     let user: User
+    // MARK: Make sure the user needs to click on checkmark on the top right for the SwiftData to be updated
     @State private var draft = ProfileDraft()
     @State private var hasLoaded = false
     
@@ -131,6 +132,7 @@ struct EditProfileView: View {
             }
         }
         .onAppear {
+            // MARK: The first time this page is loaded, save the user data into draft (temp) variable
             if !hasLoaded {
                 draft = ProfileDraft(from: user)
                 hasLoaded = true

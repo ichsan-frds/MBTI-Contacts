@@ -9,8 +9,11 @@ import SwiftUI
 import SwiftData
 
 struct MBTIData {
+    // MARK: Array of MBTI and it's Groups
     static let mbtiGroups: [String] = ["Analyst", "Diplomats", "Sentinels", "Explorers"]
+    static let possibleMBTIs: [String] = Array(descriptions.keys)
     
+    // MARK: 2D Array, displays MBTI Groups and all of the MBTI inside the group
     static let groups: [String: [String]] = [
         "Analyst":   ["INTJ", "INTP", "ENTJ", "ENTP"],
         "Diplomats": ["INFJ", "INFP", "ENFJ", "ENFP"],
@@ -18,6 +21,7 @@ struct MBTIData {
         "Explorers": ["ISTP", "ISFP", "ESTP", "ESFP"]
     ]
     
+    // MARK: Map every MBTI to it's group
     static let mbtiToGroup: [String: String] = [
         "INTJ": "Analyst", "INTP": "Analyst", "ENTJ": "Analyst", "ENTP": "Analyst",
         "INFJ": "Diplomats", "INFP": "Diplomats", "ENFJ": "Diplomats", "ENFP": "Diplomats",
@@ -25,6 +29,7 @@ struct MBTIData {
         "ISTP": "Explorers", "ISFP": "Explorers", "ESTP": "Explorers", "ESFP": "Explorers"
     ]
     
+    // MARK: Map every MBTI Groups individual color
     static let groupColors: [String: Color] = [
         "Analyst": Color(red: 0.75, green: 0.4,  blue: 0.95),
         "Diplomats": Color(red: 0.2,  green: 0.85, blue: 0.55),
@@ -32,6 +37,7 @@ struct MBTIData {
         "Explorers": Color(red: 1.0,  green: 0.7,  blue: 0.2),
     ]
     
+    // MARK: Map every MBTI individual light color (for LinearGradient)
     static let colors: [String: Color] = [
         "INTJ": Color(red: 0.75, green: 0.4,  blue: 0.95),
         "INTP": Color(red: 0.75, green: 0.4,  blue: 0.95),
@@ -51,6 +57,7 @@ struct MBTIData {
         "ESFP": Color(red: 1.0,  green: 0.7,  blue: 0.2)
     ]
     
+    // MARK: Map every MBTI individual dark color (for LinearGradient)
     static let darkColors: [String: Color] = [
         "INTJ": Color(red: 0.4,  green: 0.1,  blue: 0.6),
         "INTP": Color(red: 0.4,  green: 0.1,  blue: 0.6),
@@ -70,6 +77,7 @@ struct MBTIData {
         "ESFP": Color(red: 0.6,  green: 0.35, blue: 0.05)
     ]
     
+    // MARK: Map every MBTI individual descriptions
     static let descriptions: [String: String] = [
         "INTJ": "The INTJ is a dreamer who remains grounded in reality. They believe that with enough logic and effort, any goal is achievable.",
         "INTP": "The INTP is a creative thinker who loves exploring ideas and theories. They seek truth and logical consistency above all.",
@@ -92,8 +100,7 @@ struct MBTIData {
         "ESFP": "The ESFP is a spontaneous and fun-loving entertainer. They bring joy and energy wherever they go."
     ]
     
-    static let possibleMBTIs: [String] = Array(descriptions.keys)
-    
+    // MARK: Hardocode dummy desc
     static let possibleDescs: [String] = [
         "Calm and has a great vision in life.",
         "Strong and specialized in long range goals",
@@ -102,6 +109,7 @@ struct MBTIData {
         "Likes to solve problems and always try to find a solution",
     ]
     
+    // MARK: Pick random mbti and dummy desc
     static var randomMBTI: String {
         possibleMBTIs.randomElement() ?? "INTJ"
     }
@@ -110,8 +118,11 @@ struct MBTIData {
         possibleDescs.randomElement() ?? "Mysterious Person."
     }
     
+    // MARK: MainActor = Run Func in Main Thread
     @MainActor
+    // MARK: For the first time the app is used, seed contacts data
     static func seedData(context: ModelContext) {
+        // MARK: UserDefaults = Config for user preference
         let defaults = UserDefaults.standard
         let hasSeeded = defaults.bool(forKey: "hasSeededData")
         

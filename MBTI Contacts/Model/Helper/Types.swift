@@ -5,6 +5,7 @@
 //  Created by Ichsan Firdaus on 27/04/26.
 //
 
+// MARK: Temp var for saving user profile changes before actually updating the SwiftData
 struct ProfileDraft {
     var firstName: String = ""
     var lastName: String = ""

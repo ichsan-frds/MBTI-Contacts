@@ -7,6 +7,7 @@
 
 import Foundation
 
+// MARK: Hardcoded Dummy Contacts Data
 struct ContactSeeder {
     static let defaultContacts: [Contact] = [
         Contact(firstName: "Andres",  lastName: "Iniesta", phoneNumber: "+6212345678990", mbti: "INTJ", desc: "Calm and has a great vision in life"),

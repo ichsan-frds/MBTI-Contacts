@@ -12,6 +12,11 @@ struct RegisterView : View {
     @State private var lastName = ""
     @State private var phoneNumber = ""
     
+    // MARK: Var to make sure all the form elements have been filled
+    private var isFormValid: Bool {
+        !firstName.isEmpty && !lastName.isEmpty && !phoneNumber.isEmpty
+    }
+    
     var body : some View {
         NavigationStack {
             VStack {
@@ -23,6 +28,7 @@ struct RegisterView : View {
                             Image(mbti)
                             Text(mbti)
                                 .font(.system(size: 24, weight: .bold))
+                            // MARK: Example of calling var from Helper
                                 .foregroundStyle(MBTIData.groupColors[mbti] ?? .primary)
                         }
                     }
@@ -34,6 +40,7 @@ struct RegisterView : View {
                 Spacer()
                 
                 VStack() {
+                    // MARK: Dynamic Light Dark Mode
                     TextField("", text: $firstName, prompt: Text("First Name").foregroundColor(.secondary))
                         .padding(.vertical, 10).foregroundColor(.primary)
                     
@@ -59,23 +66,27 @@ struct RegisterView : View {
                 
                 Spacer()
                 
+                // MARK: Props Drilling
                 NavigationLink(destination: ChooseMBTIView(firstName: firstName, lastName: lastName, phoneNumber: phoneNumber)) {
                     Text("Next")
                         .font(.headline)
-                        .foregroundStyle(firstName.isEmpty || lastName.isEmpty || phoneNumber.isEmpty ? Color.secondary : Color.black)
+                        .foregroundStyle(isFormValid ? Color.black : Color.secondary)
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(firstName.isEmpty || lastName.isEmpty || phoneNumber.isEmpty ? Color(UIColor.systemGray2) : Color(red: 1.0, green: 0.87, blue: 0.7))
+                        .background(isFormValid ? Color(red: 1.0, green: 0.87, blue: 0.7) : Color(UIColor.systemGray2))
                         .cornerRadius(12)
                 }
-                .disabled(firstName.isEmpty || lastName.isEmpty || phoneNumber.isEmpty)
+                // MARK: Guard Next Button in Front-End
+                .disabled(!isFormValid)
                 .padding(.horizontal, 30)
                 .padding(.bottom, 20)
             }
             .navigationTitle("Register")
             .navigationBarTitleDisplayMode(.inline)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            // MARK: Dynamic Light Dark Mode from Assets Color Set
             .background(Color("AppBackground").ignoresSafeArea())
+            // MARK: Click anywhere to dismiss
             .onTapGesture {
                 hideKeyboard()
             }
