@@ -9,7 +9,10 @@ import SwiftUI
 import SwiftData
 
 struct EditProfileView: View {
-    @Bindable var user: User
+    let user: User
+    // MARK: Make sure the user needs to click on checkmark on the top right for the SwiftData to be updated
+    @State private var draft = ProfileDraft()
+    @State private var hasLoaded = false
     
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
@@ -22,12 +25,12 @@ struct EditProfileView: View {
                         Circle()
                             .frame(width: 160, height: 160)
                             .foregroundColor(Color.primary.opacity(0.1))
-                        Text("\(user.firstName.prefix(1).uppercased())\(user.lastName.prefix(1).uppercased())")
+                        Text("\(draft.firstName.prefix(1).uppercased())\(draft.lastName.prefix(1).uppercased())")
                             .font(.system(size: 60, weight: .bold))
                             .foregroundColor(.primary)
                     }
                     
-                    Image(user.mbti)
+                    Image(draft.mbti)
                         .resizable()
                         .scaledToFit()
                         .frame(width: 160, height: 160)
@@ -38,31 +41,18 @@ struct EditProfileView: View {
                 .padding(.top, 20)
                 
                 VStack(spacing: 4) {
-                    Text(user.firstName)
+                    Text(draft.firstName)
                         .font(.title2.bold())
                         .foregroundColor(.primary)
-                    Text(user.mbti)
+                    Text(draft.mbti)
                         .font(.headline)
-                        .foregroundColor(MBTIData.colors[user.mbti] ?? .secondary)
+                        .foregroundColor(MBTIData.colors[draft.mbti] ?? .secondary)
                 }
                 .padding(.top, 12)
                 .padding(.bottom, 16)
                 
                 HStack(spacing: 12) {
-                    // TODO: (OPTIONAL) Edit Contact Model Schema so User can Edit Photo
-                    //                Button(action: {
-                    //                    print("Edit Photo tapped")
-                    //                }) {
-                    //                    Text("Edit Photo")
-                    //                        .font(.subheadline.bold())
-                    //                        .foregroundColor(.primary) // Adaptive
-                    //                        .padding(.horizontal, 20)
-                    //                        .padding(.vertical, 10)
-                    //                        .background(Color.primary.opacity(0.1)) // Adaptive
-                    //                        .cornerRadius(999)
-                    //                }
-                    
-                    NavigationLink(destination: ChooseMBTIView(editmbtiBinding: $user.mbti)) {
+                    NavigationLink(destination: ChooseMBTIView(editmbtiBinding: $draft.mbti)) {
                         Text("Change MBTI")
                             .font(.headline.bold())
                             .foregroundColor(.black)
@@ -78,19 +68,19 @@ struct EditProfileView: View {
                 VStack(spacing: 15) {
                     
                     VStack(alignment: .leading, spacing: 10) {
-                        TextField("First name", text: $user.firstName)
+                        TextField("First name", text: $draft.firstName)
                             .foregroundColor(.primary)
                             .tint(.primary)
                         
                         Divider().background(Color.primary.opacity(0.15))
                         
-                        TextField("Last name", text: $user.lastName)
+                        TextField("Last name", text: $draft.lastName)
                             .foregroundColor(.primary)
                             .tint(.primary)
                         
                         Divider().background(Color.primary.opacity(0.15))
                         
-                        TextField("Phone", text: $user.phoneNumber)
+                        TextField("Phone", text: $draft.phoneNumber)
                             .foregroundColor(.primary)
                             .tint(.primary)
                             .keyboardType(.phonePad)
@@ -104,7 +94,7 @@ struct EditProfileView: View {
                             .font(.subheadline.bold())
                             .foregroundColor(.primary)
                         
-                        TextField("Type how you as a person here", text: $user.desc, axis: .vertical)
+                        TextField("Type how you as a person here", text: $draft.desc, axis: .vertical)
                             .foregroundColor(.secondary)
                             .tint(.primary)
                             .lineLimit(3...6)
@@ -126,6 +116,12 @@ struct EditProfileView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {
+                    user.firstName = draft.firstName
+                    user.lastName = draft.lastName
+                    user.phoneNumber = draft.phoneNumber
+                    user.mbti = draft.mbti
+                    user.desc = draft.desc
+                    
                     try? modelContext.save()
                     dismiss()
                 }) {
@@ -133,6 +129,13 @@ struct EditProfileView: View {
                         .font(.body.bold())
                         .foregroundColor(.blue)
                 }
+            }
+        }
+        .onAppear {
+            // MARK: The first time this page is loaded, save the user data into draft (temp) variable
+            if !hasLoaded {
+                draft = ProfileDraft(from: user)
+                hasLoaded = true
             }
         }
         .onTapGesture {
@@ -144,7 +147,7 @@ struct EditProfileView: View {
 #Preview {
     NavigationStack {
         EditProfileView(
-            user: User(firstName: "Ichsan", lastName: "Firdaus", phoneNumber: "+6212345678990", mbti: "INTJ", desc: "Calm and has a great vision in life Calm and has a great vision in life Calm and has a great vision")
+            user: User(firstName: "Ichsan", lastName: "Firdaus", phoneNumber: "+6212345678990", mbti: "ENFP", desc: "Calm and has a great vision in life Calm and has a great vision in life Calm and has a great vision")
         )
     }
 }

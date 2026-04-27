@@ -9,8 +9,6 @@ import SwiftUI
 import SwiftData
 
 struct SearchContactsView: View {
-    var initialSearchText: String = ""
-    
     @Query private var contacts: [Contact]
     @Query private var users: [User]
     
@@ -18,11 +16,14 @@ struct SearchContactsView: View {
         users.first
     }
     
+    // MARK: Keep track of user search input
     @State private var searchText: String = ""
     @State private var isShowingAddContactSheet = false
     
+    // MARK: Control .focused on TextField, because it only accept FocusState
     @FocusState private var isSearchFocused: Bool
     
+    // MARK: Control the search result can be hit by what (name, mbti, etc.)
     var searchResults: [Contact] {
         if searchText.isEmpty {
             return contacts
@@ -42,6 +43,7 @@ struct SearchContactsView: View {
                 String($0.firstName.prefix(1)).uppercased()
             }
             
+            // MARK: So the user can be hit by search as well and always shows at the top in search results
             let userMatchesSearch: Bool = {
                 guard let user = currentUser else { return false }
                 if searchText.isEmpty { return true }
@@ -53,7 +55,6 @@ struct SearchContactsView: View {
             if searchResults.isEmpty && !userMatchesSearch {
                 Spacer()
                 Text(searchText.isEmpty ? "No contacts yet" : "No results found")
-                    // 1. Replaced white.opacity with native secondary
                     .foregroundColor(.secondary)
                 Spacer()
             } else {
@@ -149,7 +150,8 @@ struct SearchContactsView: View {
         .navigationTitle("All Contacts")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            searchText = initialSearchText
+            // MARK: On Page Load, focus on Search bar (so the user can immediately type)
+            searchText = ""
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 isSearchFocused = true
             }

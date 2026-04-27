@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// MARK: Force the keyboard to dissapear
 func hideKeyboard() {
     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
 }

@@ -16,8 +16,10 @@ struct UserDescriptionView: View {
     
     @Environment(\.modelContext) private var modelContext
     
+    // MARK: Keep track of user input
     @State private var textInput: String = ""
     
+    // MARK: Max Text Length to limit user textInput
     let maxTextLength: Int = 100
     
     var body: some View {
@@ -94,6 +96,7 @@ struct UserDescriptionView: View {
         }
     }
     
+    // MARK: Save User Func, it is put here so it doesn't have a lot of params
     private func saveUser() {
         let newUser = User(
             firstName: firstName,

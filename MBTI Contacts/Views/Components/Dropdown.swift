@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct Dropdown: View {
+    // MARK: Binding = Passing by Reference
     @Binding var selection: String
     
     var body: some View {

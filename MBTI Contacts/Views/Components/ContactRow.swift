@@ -10,9 +10,9 @@ import SwiftUI
 struct ContactRow: View {
     var person: any Profile
     
-    var selectedGroup: String = "Analyst"
+    // MARK: Used in SearchContactsView
     var displayMbti: Bool = false
-    
+    // MARK: Used in GroupedMBTIView, Make sure Text still appear in white whether it's Light or Dark mode
     var useWhiteText: Bool = false
     
     @Environment(\.colorScheme) var colorScheme

@@ -7,6 +7,7 @@
 
 import Foundation
 
+// MARK: Hardcoded Dummy Contacts Data
 struct ContactSeeder {
     static let defaultContacts: [Contact] = [
         Contact(firstName: "Andres",  lastName: "Iniesta", phoneNumber: "+6212345678990", mbti: "INTJ", desc: "Calm and has a great vision in life"),
@@ -40,6 +41,7 @@ struct ContactSeeder {
         Contact(firstName: "Luka", lastName: "Modric", phoneNumber: "+6282526272829", mbti: "ESFJ", desc: "The glue of the team, reading the emotional and tactical needs of the match"),
         Contact(firstName: "Wayne", lastName: "Rooney", phoneNumber: "+6282627282930", mbti: "ESTP", desc: "A dynamic powerhouse who thrives in the heat of the moment"),
         Contact(firstName: "Jamie", lastName: "Vardy", phoneNumber: "+6282728293031", mbti: "ESTP", desc: "High energy, fast-paced attacker who seizes immediate opportunities"),
-        Contact(firstName: "Neymar", lastName: "Jr", phoneNumber: "+6282829303132", mbti: "ESFP", desc: "The ultimate entertainer who loves putting on a show for the crowd")
+        Contact(firstName: "Neymar", lastName: "Jr", phoneNumber: "+6282829303132", mbti: "ESFP", desc: "The ultimate entertainer who loves putting on a show for the crowd"),
+        Contact(firstName: "Ichsan", lastName: "Firdaus", phoneNumber: "+6285959808110", mbti: "INFJ", desc: "Calm Loving Father"),
     ]
 }
