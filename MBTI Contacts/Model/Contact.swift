@@ -9,12 +9,12 @@ import Foundation
 import SwiftData
 
 @Model
-final class Contact {
+final class Contact: Profile {
     var firstName: String
     var lastName: String
     var phoneNumber: String
     var mbti: String
-    var personDescription: String
+    var desc: String
     
     var timestamp: Date
     
@@ -27,14 +27,14 @@ final class Contact {
         lastName: String = "",
         phoneNumber: String = "",
         mbti: String,
-        personDescription: String,
+        desc: String,
         timestamp: Date = .now
     ) {
         self.firstName = firstName
         self.lastName = lastName
         self.phoneNumber = phoneNumber
         self.mbti = mbti
-        self.personDescription = personDescription
+        self.desc = desc
         self.timestamp = timestamp
     }
 }

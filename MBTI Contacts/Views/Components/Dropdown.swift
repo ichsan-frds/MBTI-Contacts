@@ -2,31 +2,36 @@
 //  Dropdown.swift
 //  MBTI Contacts
 //
-//  Created by Ichsan Firdaus on 16/04/26.
+//  Created by Richard on 20/04/26.
 //
 
 import SwiftUI
 
 struct Dropdown: View {
     @Binding var selection: String
-    let options = ["Analyst", "Diplomats", "Sentinels", "Explorers"]
     
     var body: some View {
         Menu {
-            ForEach(options, id: \.self) { option in
+            ForEach(MBTIData.mbtiGroups, id: \.self) { option in
                 Button(option) {
                     selection = option
                 }
             }
         } label: {
-            Text(selection)
-                .font(.headline)
-                .foregroundStyle(.white)
-                .frame(maxWidth: 250, maxHeight: 10, alignment: .center)
-                .padding()
-                .background(Color.black)
-                .cornerRadius(60)
+            HStack {
+                Text(selection)
+                    .font(.headline)
+                    .foregroundStyle(.primary)
+                Spacer()
+                Image(systemName: "chevron.down")
+                    .foregroundStyle(.primary)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 12)
+            .frame(width: 250)
+            .background(Color.secondary.opacity(0.2))
+            .cornerRadius(60)
         }
-        .padding(.horizontal)
+        .tint(.primary)
     }
 }

@@ -2,75 +2,111 @@
 //  UserDescriptionView.swift
 //  MBTI Contacts
 //
-//  Created by Ichsan Firdaus on 17/04/26.
+//  Created by Ichsan Firdaus on 18/04/26.
 //
 
 import SwiftUI
+import SwiftData
 
 struct UserDescriptionView: View {
-    let selectedMBTI: String
-    @Environment(\.dismiss) private var dismiss
+    let firstName: String
+    let lastName: String
+    let phoneNumber: String
+    let mbti: String
+    
+    @Environment(\.modelContext) private var modelContext
+    
     @State private var textInput: String = ""
     
     let maxTextLength: Int = 100
     
     var body: some View {
-        NavigationStack {
-            VStack {
-                // MARK: For Layouting when Debugging - COMMENT IN PROD
-                Spacer()
-                Text("Describe Yourself in One Sentence")
-                    .font(Font.title.bold())
-                    .multilineTextAlignment(.center)
-//                    .padding(.top, 50)
-                Spacer()
-                TextEditor(text: $textInput)
-                    .onChange(of: textInput) { oldValue, newValue in
-                        if newValue.count > maxTextLength {
-                            textInput = String(newValue.prefix(maxTextLength))
-                        }
-                    }
-                    .frame(height: 200)
-                    .textFieldStyle(.roundedBorder)
-                    .border(Color.gray, width: 1)
-                    .padding(.horizontal, 50)
-                Text("\(textInput.count) / \(maxTextLength)")
-                    .bold()
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                    .padding(.horizontal, 50)
-                Spacer()
-                Button(action: {
-                    dismiss()
-                }) {
-                    VStack {
-                        Image(selectedMBTI)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 150, height: 150)
-                        Text(selectedMBTI)
-                            .font(.title3.bold())
-                            .foregroundColor(.primary)
-                    }
-                }
-                    .border(Color.black, width: 1)
-                    .cornerRadius(3)
-//                    .shadow(radius: 5)
-                Spacer()
-                NavigationLink(destination: ContentView()) {
-                    Text("Save")
-                        .font(.headline)
-                        .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.black)
-                        .cornerRadius(12)
-                }
+        VStack(spacing: 0) {
+            Spacer()
+            
+            Text("Describe Yourself in One Sentence")
+                .font(.title.bold())
+                .foregroundColor(.primary)
+                .multilineTextAlignment(.center)
                 .padding(.horizontal, 30)
+            
+            Spacer()
+            
+            TextEditor(text: $textInput)
+                .onChange(of: textInput) { oldValue, newValue in
+                    if newValue.count > maxTextLength {
+                        textInput = String(newValue.prefix(maxTextLength))
+                    }
+                }
+                .frame(height: 170)
+                .scrollContentBackground(.hidden)
+                .background(Color(UIColor.systemGray5))
+                .foregroundColor(.primary)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.primary.opacity(0.4), lineWidth: 1)
+                )
+                .padding(.horizontal, 30)
+            
+            Text("\(textInput.count)/\(maxTextLength)")
+                .bold()
+                .foregroundColor(.primary)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .padding(.horizontal, 30)
+                .padding(.top, 6)
+            
+            Spacer()
+            
+            VStack(spacing: 8) {
+                Image(mbti)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 200, height: 200)
+                
+                Text(mbti)
+                    .font(.title2.bold())
+                    .foregroundColor(.primary)
             }
+            
+            Spacer()
+            
+            Button(action: saveUser) {
+                Text("Save")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(textInput.isEmpty ? Color.secondary : Color.black)
+                    .cornerRadius(12)
+            }
+            .disabled(textInput.isEmpty)
+            .padding(.horizontal, 30)
+            .padding(.bottom, 20)
         }
+        .navigationBarBackButtonHidden(false)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(
+            Color("AppBackground")
+                .ignoresSafeArea()
+        )
+        .onTapGesture {
+            hideKeyboard()
+        }
+    }
+    
+    private func saveUser() {
+        let newUser = User(
+            firstName: firstName,
+            lastName: lastName,
+            phoneNumber: phoneNumber,
+            mbti: mbti,
+            desc: textInput
+        )
+        modelContext.insert(newUser)
     }
 }
 
+
 #Preview {
-    UserDescriptionView(selectedMBTI: "INTJ")
+    UserDescriptionView(firstName: "Ichsan", lastName: "Firdaus", phoneNumber: "+6285959808110", mbti: "INTJ")
 }

@@ -8,52 +8,73 @@
 import SwiftUI
 
 struct ContactRow: View {
-    let contact: Contact
+    var person: any Profile
+    
+    var selectedGroup: String = "Analyst"
     var displayMbti: Bool = false
     
+    var useWhiteText: Bool = false
+    
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
-        NavigationLink(destination: ContactDetailView(contact: contact)) {
-            HStack {
+        NavigationLink(destination: ContactDetailView(person: person)) {
+            HStack(spacing: 14) {
+                
                 ZStack {
                     Circle()
-                        .frame(width: 50, height: 50)
-                        .foregroundColor(Color(.systemGray6))
-                    Text("\(contact.firstName.prefix(1).uppercased())\(contact.lastName.prefix(1).uppercased())")
-                        .font(.system(size: 20, weight: .bold))
-                        .foregroundColor(.black)
+                        .fill(Color.primary.opacity(0.1))
+                        .frame(width: 46, height: 46)
+                    Text("\(person.firstName.prefix(1).uppercased())\(person.lastName.prefix(1).uppercased())")
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundColor(useWhiteText ? .white : .primary)
                 }
                 
-                VStack(alignment: .leading, spacing: 4) {
-                    Spacer()
-                    
-                    HStack {
-                        Text("\(contact.firstName) \(contact.lastName)")
+                if person is User {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("\(person.firstName) \(person.lastName)")
                             .font(.headline)
-                            .foregroundColor(.black)
+                            .foregroundColor(useWhiteText ? .white : .primary)
                         
-                        if displayMbti {
-                            Spacer()
-                            Text(contact.mbti)
-                                .font(.headline.bold())
-                                .foregroundColor(.secondary)
-                        }
+                        Text("My Profile")
+                            .font(.caption)
+                            .foregroundColor(useWhiteText ? .white.opacity(0.6) : .secondary)
                     }
-                    
-                    // MARK: UNCOMMENT TO ADD DESCRIPTION
-                    //                        Text(contact.personDescription)
-                    //                    .font(.system(size: 12))
-                    //                    .foregroundColor(.secondary)
-                    //                    .lineLimit(2)
-                    //                    .multilineTextAlignment(.leading)
-                    
                     Spacer()
                     
-                    Divider()
-                        .padding(.top, 5)
+                } else {
+                    Text("\(person.firstName) \(person.lastName)")
+                        .font(.headline)
+                        .foregroundColor(useWhiteText ? .white : .primary)
+                    
+                    if displayMbti {
+                        Spacer()
+                        Text(person.mbti)
+                            .font(.headline.bold())
+                            .foregroundStyle(LinearGradient(
+                                colors: [
+                                    MBTIData.colors[person.mbti] ?? Color.purple,
+                                    colorScheme == .dark
+                                    ? (MBTIData.darkColors[person.mbti] ?? Color.purple.opacity(0.5))
+                                    : (MBTIData.colors[person.mbti]?.opacity(0.6) ?? Color.purple.opacity(0.6))
+                                ],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            ))
+                    } else {
+                        Spacer()
+                    }
                 }
             }
-            .padding(.horizontal)
-            .cornerRadius(25)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        
+        if person is Contact {
+            Divider()
+                .background(Color.primary.opacity(0.15))
+                .padding(.leading, 76)
+                .padding(.trailing, 20)
         }
     }
 }

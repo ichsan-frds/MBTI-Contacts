@@ -10,18 +10,27 @@ import SwiftData
 
 @main
 struct MBTI_ContactsApp: App {
-    var sharedModelContainer: ModelContainer = {
+    let sharedModelContainer: ModelContainer
+    
+    init() {
         let schema = Schema([
             Contact.self,
+            User.self,
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
         do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+            sharedModelContainer = try ModelContainer(for: schema, configurations: [modelConfiguration])
+            
+            let context = sharedModelContainer.mainContext
+            Task { @MainActor in
+                MBTIData.seedData(context: context)
+            }
+            
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
-    }()
+    }
 
     var body: some Scene {
         WindowGroup {
